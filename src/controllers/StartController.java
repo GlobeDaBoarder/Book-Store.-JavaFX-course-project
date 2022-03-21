@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -30,8 +31,18 @@ public class StartController extends Application {
         launch();
     }
 
-    public void logIn(ActionEvent actionEvent) {
+    public void logIn(ActionEvent actionEvent) throws IOException {
         System.out.println(loginF.getText() + ' ' + pswF.getText());
+
+        FXMLLoader fxmlLoader = new FXMLLoader(StartController.class.getResource("../view/MainWindow.fxml"));
+        Parent parent = fxmlLoader.load();
+        Scene  scene = new Scene(parent);
+
+        Stage stage = (Stage) loginF.getScene().getWindow();
+
+        stage.setTitle("Book Store");
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void SignUp(ActionEvent actionEvent) {
