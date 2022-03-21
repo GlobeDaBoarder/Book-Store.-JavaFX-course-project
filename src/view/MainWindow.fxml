@@ -60,7 +60,6 @@
                   <ComboBox fx:id="bookGenre" layoutX="435.0" layoutY="14.0" prefWidth="150.0" promptText="genre" />
                   <DatePicker fx:id="publDate" layoutX="282.0" layoutY="257.0" promptText="Publish date" />
                   <TextField fx:id="pgNum" layoutX="282.0" layoutY="291.0" promptText="page num" />
-                  <TextField fx:id="bookEdition" layoutX="282.0" layoutY="331.0" promptText="Edition" />
                   <TextField fx:id="bookAuthor" layoutX="435.0" layoutY="291.0" promptText="Author" />
                   <Button layoutX="533.0" layoutY="331.0" mnemonicParsing="false" onAction="#addBook" text="Button" />
                   <TextField fx:id="bookPrice" layoutX="461.0" layoutY="257.0" prefHeight="26.0" prefWidth="125.0" promptText="book price" />
