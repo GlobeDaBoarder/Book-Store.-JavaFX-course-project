@@ -45,4 +45,19 @@ public class Book {
         this.quantityAvalible = quantityAvalible;
         this.genre = genre;
     }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "productID=" + productID +
+                ", price=" + price +
+                ", name='" + name + '\'' +
+                ", author='" + author + '\'' +
+                ", releaseDate=" + releaseDate +
+                ", pageCount=" + pageCount +
+                ", lang=" + lang +
+                ", quantityAvalible=" + quantityAvalible +
+                ", genre=" + genre +
+                '}';
+    }
 }
