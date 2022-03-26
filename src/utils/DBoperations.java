@@ -13,7 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class DBoperations {
-    public static Connection connectToDB() {
+   /* public static Connection connectToDB() {
         Connection conn = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -55,5 +55,5 @@ public class DBoperations {
             e.printStackTrace();
         }
         return books;
-    }
+    }*/
 }
