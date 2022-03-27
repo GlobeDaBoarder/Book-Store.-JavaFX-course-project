@@ -11,9 +11,8 @@ public class TestHibernate {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("GlobeBookShop");
         UserHibController userHibController = new UserHibController(entityManagerFactory);
 
-        /*Employee employee = new Employee("login", "pasword", EmpPositions.ADMIN);
-        userHibController.createUser(employee);
-        LegalEntity legalEntity = new LegalEntity("qq", "ww", "emaol", "ph", "name");
-        userHibController.createUser(legalEntity);*/
+        /*Employee employee = new Employee("a", "a", EmpPositions.ADMIN);
+        userHibController.createUser(employee);*/
+
     }
 }

@@ -41,7 +41,6 @@ public class LoginPage {
     }
 
     public static void generateMessage(String header, String content) {
-        //https://code.makery.ch/blog/javafx-dialogs-official/
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
         alert.setHeaderText(header);
@@ -49,6 +48,12 @@ public class LoginPage {
         alert.showAndWait();
     }
 
-    public void SignUp(ActionEvent actionEvent) {
+    public void SignUp(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(StartController.class.getResource("../view/SignUpPage.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = (Stage) loginF.getScene().getWindow();
+        stage.setTitle("Sign Up Page");
+        stage.setScene(scene);
+        stage.show();
     }
 }

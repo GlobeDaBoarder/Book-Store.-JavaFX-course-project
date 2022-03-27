@@ -24,6 +24,7 @@ public class Book {
     private int quantityAvalible;
     @Enumerated
     private eBookGenre genre;
+    private boolean isAvailable = false;
 
     public Book(double price, String name, String author, String description, LocalDate releaseDate, int pageCount,
                 eBookLang lang, int quantityAvalible, eBookGenre genre) {
@@ -36,6 +37,8 @@ public class Book {
         this.lang = lang;
         this.quantityAvalible = quantityAvalible;
         this.genre = genre;
+
+        if (this.quantityAvalible > 0) { this.isAvailable = true;}
     }
 
     public Book(String name, String author) {

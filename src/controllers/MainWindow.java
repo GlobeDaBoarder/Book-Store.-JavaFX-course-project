@@ -18,6 +18,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainWindow implements Initializable {
@@ -37,10 +38,10 @@ public class MainWindow implements Initializable {
 
     private int userId;
 
-    private EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("GlobeBookShop");
+    private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("GlobeBookShop");
     BookHibController bookHibController = new BookHibController(entityManagerFactory);
 
-    public void addBook(ActionEvent actionEvent) throws SQLException {
+    public void addBook() {
         Book book = new Book(Double.parseDouble(bookPrice.getText()), bookTitle.getText(),
                 bookAuthor.getText(), bookDescription.getText(), publDate.getValue(), Integer.parseInt(pgNum.getText()), eBookLang.English,
                 Integer.parseInt(bookQuantity.getText()), eBookGenre.SCI_FI);
@@ -49,11 +50,12 @@ public class MainWindow implements Initializable {
     }
 
     private void refreshTable() {
-       /* bookList.getItems().clear();
+        bookList.getItems().clear();
         bookListMngr.getItems().clear();
-        ArrayList<Book> books = DBoperations.getAllBooksFromDb();
+        List<Book> books = bookHibController.getAllBooks(true);
         books.forEach(b -> bookList.getItems().add(b));
-        books.forEach(b -> bookListMngr.getItems().add(b));*/
+        books = bookHibController.getAllBooks(false);
+        books.forEach(b -> bookListMngr.getItems().add(b));
     }
 
     public void setUserId(int userId) {

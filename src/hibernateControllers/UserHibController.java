@@ -9,6 +9,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.List;
 
 public class UserHibController {
     private EntityManagerFactory emf = null;
@@ -66,6 +67,60 @@ public class UserHibController {
             return (User) q.getSingleResult();
         } catch (NoResultException e) {
             return null;
+        }
+    }
+
+    public User getUserById(int id) {
+        EntityManager em = null;
+        User user = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            user = em.find(User.class, id);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println("No user with such ID");
+        }
+        return user;
+    }
+
+    public List<User> getAllUsers() {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery query = em.getCriteriaBuilder().createQuery();
+            query.select(query.from(User.class));
+            Query q = em.createQuery(query);
+
+            return q.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
+
+    public void removeUser(int id) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            User user = null;
+            try {
+                user = em.getReference(User.class, id);
+            } catch (Exception e) {
+                System.out.println("No user with such ID");
+            }
+            em.remove(user);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
     }
 }
