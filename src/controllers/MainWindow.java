@@ -1,9 +1,8 @@
 package controllers;
 
-import book_store.Book;
-import book_store.eBookGenre;
-import book_store.eBookLang;
+import book_store.*;
 import hibernateControllers.BookHibController;
+import hibernateControllers.UserHibController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -35,16 +34,31 @@ public class MainWindow implements Initializable {
     public TextField bookPrice;
     public TextField bookQuantity;
     public ListView bookListMngr;
+    public Tab BookShopListTab;
+    public Tab OrdersTab;
+    public Tab ManageBooksTab;
+    public ComboBox bookLang;
 
     private int userId;
 
     private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("GlobeBookShop");
     BookHibController bookHibController = new BookHibController(entityManagerFactory);
+    UserHibController userHibController = new UserHibController(entityManagerFactory);
+
+    private void modifyAccess() {
+        User user = userHibController.getUserById(userId);
+        if (user.getClass() != Employee.class){
+            ManageBooksTab.setDisable(true);
+        }else{
+            ManageBooksTab.setDisable(false);
+        }
+    }
 
     public void addBook() {
         Book book = new Book(Double.parseDouble(bookPrice.getText()), bookTitle.getText(),
-                bookAuthor.getText(), bookDescription.getText(), publDate.getValue(), Integer.parseInt(pgNum.getText()), eBookLang.English,
-                Integer.parseInt(bookQuantity.getText()), eBookGenre.SCI_FI);
+                bookAuthor.getText(), bookDescription.getText(), publDate.getValue(), Integer.parseInt(pgNum.getText()),
+                eBookLang.valueOf(bookLang.getSelectionModel().getSelectedItem().toString()), Integer.parseInt(bookQuantity.getText()),
+                eBookGenre.valueOf(bookGenre.getSelectionModel().getSelectedItem().toString()));
         bookHibController.createBook(book);
         refreshTable();
     }
@@ -64,6 +78,8 @@ public class MainWindow implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        bookGenre.getItems().addAll(eBookGenre.values());
+        bookLang.getItems().addAll(eBookLang.values());
         refreshTable();
     }
 }

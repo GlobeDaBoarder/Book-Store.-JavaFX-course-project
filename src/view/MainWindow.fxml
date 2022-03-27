@@ -16,7 +16,7 @@
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainWindow">
   <tabs>
-    <Tab text="List">
+    <Tab fx:id="BookShopListTab" text="List">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -36,12 +36,12 @@
                </children></AnchorPane>
       </content>
     </Tab>
-    <Tab text="Orders">
+    <Tab fx:id="OrdersTab" text="Orders">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
       </content>
     </Tab>
-      <Tab text="Manage books">
+      <Tab fx:id="ManageBooksTab" text="Manage books">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -64,6 +64,7 @@
                   <Button layoutX="533.0" layoutY="331.0" mnemonicParsing="false" onAction="#addBook" text="Button" />
                   <TextField fx:id="bookPrice" layoutX="461.0" layoutY="257.0" prefHeight="26.0" prefWidth="125.0" promptText="book price" />
                   <TextField fx:id="bookQuantity" layoutX="435.0" layoutY="330.0" prefHeight="26.0" prefWidth="90.0" promptText="quantity " />
+                  <ComboBox fx:id="bookLang" layoutX="281.0" layoutY="330.0" prefWidth="150.0" promptText="language" />
                </children>
             </AnchorPane>
         </content>
