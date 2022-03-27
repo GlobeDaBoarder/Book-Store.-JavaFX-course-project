@@ -35,6 +35,8 @@ public class MainWindow implements Initializable {
     public TextField bookQuantity;
     public ListView bookListMngr;
 
+    private int userId;
+
     private EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory("GlobeBookShop");
     BookHibController bookHibController = new BookHibController(entityManagerFactory);
 
@@ -52,6 +54,10 @@ public class MainWindow implements Initializable {
         ArrayList<Book> books = DBoperations.getAllBooksFromDb();
         books.forEach(b -> bookList.getItems().add(b));
         books.forEach(b -> bookListMngr.getItems().add(b));*/
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     @Override

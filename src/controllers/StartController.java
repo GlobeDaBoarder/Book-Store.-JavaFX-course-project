@@ -20,7 +20,7 @@ public class StartController extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(StartController.class.getResource("../view/Start.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(StartController.class.getResource("../view/LoginPage.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Book Store");
         stage.setScene(scene);
