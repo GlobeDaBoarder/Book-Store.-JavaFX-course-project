@@ -12,7 +12,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import utils.DBoperations;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
