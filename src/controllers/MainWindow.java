@@ -6,6 +6,7 @@ import hibernateControllers.UserHibController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import utils.DBoperations;
 
@@ -24,7 +25,6 @@ public class MainWindow implements Initializable {
     @FXML
     public ListView bookList;
     @FXML
-    public CheckBox check;
     public TextField bookTitle;
     public TextArea bookDescription;
     public ComboBox bookGenre;
@@ -55,6 +55,12 @@ public class MainWindow implements Initializable {
     }
 
     public void addBook() {
+        if(bookPrice.getText().isBlank() || bookTitle.getText().isBlank() || bookAuthor.getText().isBlank()
+                || bookDescription.getText().isBlank() || publDate.getValue() == null || pgNum.getText().isBlank()
+                || bookLang.getValue() == null || bookQuantity.getText().isBlank() || bookGenre.getValue() == null){
+            AlertMessage.generateMessage("input error", "All fields should be non-empty");
+            return;
+        }
         Book book = new Book(Double.parseDouble(bookPrice.getText()), bookTitle.getText(),
                 bookAuthor.getText(), bookDescription.getText(), publDate.getValue(), Integer.parseInt(pgNum.getText()),
                 eBookLang.valueOf(bookLang.getSelectionModel().getSelectedItem().toString()), Integer.parseInt(bookQuantity.getText()),
