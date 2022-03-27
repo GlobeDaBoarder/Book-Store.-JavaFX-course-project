@@ -73,9 +73,9 @@ public class MainWindow implements Initializable {
         bookList.getItems().clear();
         bookListMngr.getItems().clear();
         List<Book> books = bookHibController.getAllBooks(true);
-        books.forEach(b -> bookList.getItems().add(b));
+        books.forEach(b -> bookList.getItems().add(b.getName() + " by " + b.getAuthor()));
         books = bookHibController.getAllBooks(false);
-        books.forEach(b -> bookListMngr.getItems().add(b));
+        books.forEach(b -> bookListMngr.getItems().add(b.getName() + " by " + b.getAuthor() + "(Available: " + b.isAvailable() + ")"));
     }
 
     public void setUserId(int userId) {
