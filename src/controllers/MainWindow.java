@@ -74,6 +74,7 @@ public class MainWindow implements Initializable {
 
     public void setUserId(int userId) {
         this.userId = userId;
+        modifyAccess();
     }
 
     @Override
