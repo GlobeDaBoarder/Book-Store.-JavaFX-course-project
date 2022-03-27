@@ -1,5 +1,6 @@
 package controllers;
 
+import book_store.AlertMessage;
 import book_store.User;
 import hibernateControllers.UserHibController;
 import javafx.event.ActionEvent;
@@ -36,16 +37,8 @@ public class LoginPage {
             stage.setScene(scene);
             stage.show();
         } else {
-            generateMessage("Incorrect Login or Password!", "Try again.");
+            AlertMessage.generateMessage("Incorrect Login or Password!", "Try again.");
         }
-    }
-
-    public static void generateMessage(String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 
     public void SignUp(ActionEvent actionEvent) throws IOException {

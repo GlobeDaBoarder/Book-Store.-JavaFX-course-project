@@ -1,5 +1,6 @@
 package controllers;
 
+import book_store.AlertMessage;
 import book_store.LegalEntity;
 import book_store.Person;
 import hibernateControllers.UserHibController;
@@ -18,6 +19,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.io.IOException;
 import java.net.URL;
+import java.security.AllPermission;
 import java.util.ResourceBundle;
 
 public class SignUpPage implements Initializable {
@@ -37,18 +39,22 @@ public class SignUpPage implements Initializable {
     public void saveAcc(ActionEvent actionEvent) throws IOException {
         if (phoneNumberF.getText().isBlank() || emailF.getText().isBlank() || loginF.getText().isBlank()
                 || passwordF.getText().isBlank()){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Information Dialog");
-            alert.setHeaderText("");
-            alert.setContentText("Some field is empty ");
-            alert.showAndWait();
+            AlertMessage.generateMessage("input error", "All fields should be non-empty!");
 
             return;
         }
         if (personRad.isSelected()) {
+            if (nameF.getText().isBlank() || surnameF.getText().isBlank()){
+                AlertMessage.generateMessage("input error", "name and surname should be provided!");
+                return;
+            }
             userHibController.createUser(new Person(loginF.getText(), passwordF.getText(), emailF.getText(),
                     phoneNumberF.getText(), nameF.getText(), surnameF.getText()));
         } else {
+            if (companyNameF.getText().isBlank()){
+                AlertMessage.generateMessage("input error", "company name should be provided!");
+                return;
+            }
             userHibController.createUser(new LegalEntity(loginF.getText(), passwordF.getText(), emailF.getText(),
                     phoneNumberF.getText(), companyNameF.getText()));
         }
