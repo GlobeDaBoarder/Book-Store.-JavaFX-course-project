@@ -22,6 +22,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -99,23 +100,39 @@ public class MainWindow implements Initializable {
     }
 
     public void openAddUserPage(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(StartController.class.getResource("../view/AddUserPage.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(StartController.class.getResource("../view/addUserPage.fxml"));
         Parent parent = fxmlLoader.load();
 
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Book store");
+        stage.setTitle("User Management");
         stage.setScene(scene);
         stage.showAndWait();
     }
 
-    public void editSelected(ActionEvent actionEvent) {
+    public void editSelected(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(StartController.class.getResource("../view/editBookPage.fxml"));
+        Parent parent = fxmlLoader.load();
+
+        EditBookPage editBookPage = fxmlLoader.getController();
+        int id = Integer.parseInt(bookListMngr.getSelectionModel().getSelectedItem().toString().split(":")[0]);
+        editBookPage.setBookData(id);
+
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Edit Book");
+        stage.setScene(scene);
+        stage.showAndWait();
+
+        refreshTable();
+
     }
 
     public void deleteSelected(ActionEvent actionEvent) {
-        System.out.println(bookListMngr.getSelectionModel().getSelectedItem().toString());
-        bookHibController.removeBook(Integer.parseInt(bookListMngr.getSelectionModel().getSelectedItem().toString().split(":")[0]));
+        int id = Integer.parseInt(bookListMngr.getSelectionModel().getSelectedItem().toString().split(":")[0]);
+        bookHibController.removeBook(id);
         refreshTable();
     }
 }
