@@ -83,7 +83,7 @@ public class MainWindow implements Initializable {
         List<Book> books = bookHibController.getAllBooks(true);
         books.forEach(b -> bookList.getItems().add(b.getName() + " by " + b.getAuthor()));
         books = bookHibController.getAllBooks(false);
-        books.forEach(b -> bookListMngr.getItems().add(b.getName() + " by " + b.getAuthor() + "(Available: " + b.isAvailable() + ")"));
+        books.forEach(b -> bookListMngr.getItems().add(b.getProductID() + ": " + b.getName() + " by " + b.getAuthor() + "(Available: " + b.isAvailable() + ")"));
     }
 
     public void setUserId(int userId) {
@@ -108,5 +108,14 @@ public class MainWindow implements Initializable {
         stage.setTitle("Book store");
         stage.setScene(scene);
         stage.showAndWait();
+    }
+
+    public void editSelected(ActionEvent actionEvent) {
+    }
+
+    public void deleteSelected(ActionEvent actionEvent) {
+        System.out.println(bookListMngr.getSelectionModel().getSelectedItem().toString());
+        bookHibController.removeBook(Integer.parseInt(bookListMngr.getSelectionModel().getSelectedItem().toString().split(":")[0]));
+        refreshTable();
     }
 }
