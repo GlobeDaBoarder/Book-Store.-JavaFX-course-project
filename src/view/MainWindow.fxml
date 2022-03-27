@@ -8,6 +8,8 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -16,7 +18,7 @@
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainWindow">
   <tabs>
-    <Tab fx:id="BookShopListTab" text="List">
+    <Tab fx:id="BookShopListTab" text="Books">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
@@ -36,7 +38,7 @@
                </children></AnchorPane>
       </content>
     </Tab>
-    <Tab fx:id="OrdersTab" text="Orders">
+    <Tab fx:id="ShoppingCartTab" text="Shopping Cart">
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
       </content>
@@ -61,10 +63,25 @@
                   <DatePicker fx:id="publDate" layoutX="282.0" layoutY="257.0" promptText="Publish date" />
                   <TextField fx:id="pgNum" layoutX="282.0" layoutY="291.0" promptText="page num" />
                   <TextField fx:id="bookAuthor" layoutX="435.0" layoutY="291.0" promptText="Author" />
-                  <Button layoutX="533.0" layoutY="331.0" mnemonicParsing="false" onAction="#addBook" text="Button" />
+                  <Button layoutX="518.0" layoutY="330.0" mnemonicParsing="false" onAction="#addBook" text="Add Book" />
                   <TextField fx:id="bookPrice" layoutX="461.0" layoutY="257.0" prefHeight="26.0" prefWidth="125.0" promptText="book price" />
-                  <TextField fx:id="bookQuantity" layoutX="435.0" layoutY="330.0" prefHeight="26.0" prefWidth="90.0" promptText="quantity " />
+                  <TextField fx:id="bookQuantity" layoutX="435.0" layoutY="330.0" prefHeight="26.0" prefWidth="70.0" promptText="quantity " />
                   <ComboBox fx:id="bookLang" layoutX="281.0" layoutY="330.0" prefWidth="150.0" promptText="language" />
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
+      <Tab fx:id="ManageUsersTab" text="Manage Users">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TableView layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="572.0">
+                    <columns>
+                      <TableColumn prefWidth="75.0" text="C1" />
+                      <TableColumn prefWidth="75.0" text="C2" />
+                    </columns>
+                  </TableView>
+                  <Button layoutX="274.0" layoutY="264.0" mnemonicParsing="false" onAction="#openAddUserPage" text="Add User" />
                </children>
             </AnchorPane>
         </content>

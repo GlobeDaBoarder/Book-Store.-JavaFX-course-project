@@ -5,13 +5,18 @@ import hibernateControllers.BookHibController;
 import hibernateControllers.UserHibController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import utils.DBoperations;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
@@ -35,9 +40,10 @@ public class MainWindow implements Initializable {
     public TextField bookQuantity;
     public ListView bookListMngr;
     public Tab BookShopListTab;
-    public Tab OrdersTab;
     public Tab ManageBooksTab;
     public ComboBox bookLang;
+    public Tab ShoppingCartTab;
+    public Tab ManageUsersTab;
 
     private int userId;
 
@@ -49,8 +55,10 @@ public class MainWindow implements Initializable {
         User user = userHibController.getUserById(userId);
         if (user.getClass() != Employee.class){
             ManageBooksTab.setDisable(true);
+            ManageUsersTab.setDisable(true);
         }else{
             ManageBooksTab.setDisable(false);
+            ManageUsersTab.setDisable(false);
         }
     }
 
@@ -88,5 +96,17 @@ public class MainWindow implements Initializable {
         bookGenre.getItems().addAll(eBookGenre.values());
         bookLang.getItems().addAll(eBookLang.values());
         refreshTable();
+    }
+
+    public void openAddUserPage(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(StartController.class.getResource("../view/AddUserPage.fxml"));
+        Parent parent = fxmlLoader.load();
+
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Book store");
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 }

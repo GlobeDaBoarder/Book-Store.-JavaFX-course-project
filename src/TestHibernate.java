@@ -1,6 +1,3 @@
-import book_store.EmpPositions;
-import book_store.Employee;
-import book_store.LegalEntity;
 import hibernateControllers.UserHibController;
 
 import javax.persistence.EntityManagerFactory;

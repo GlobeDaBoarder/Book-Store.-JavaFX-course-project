@@ -1,6 +1,6 @@
 package book_store;
 
-public enum EmpPositions {
+public enum eEmpPositions {
     ADMIN,
     MOD
 }

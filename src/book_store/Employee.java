@@ -9,9 +9,9 @@ import javax.persistence.Enumerated;
 @Entity
 public class Employee extends User{
     @Enumerated
-    EmpPositions pos;
+    eEmpPositions pos;
 
-    public Employee(String login, String password, EmpPositions pos) {
+    public Employee(String login, String password, eEmpPositions pos) {
         super(login, password);
         this.pos = pos;
     }
