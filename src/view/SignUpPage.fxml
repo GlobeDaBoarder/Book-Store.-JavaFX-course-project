@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.SignUpPage"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane prefHeight="329.0" prefWidth="391.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SignUpPage">
+   <children>
+      <TextField fx:id="phoneNumberF" layoutX="30.0" layoutY="31.0" promptText="phone number" />
+      <TextField fx:id="emailF" layoutX="31.0" layoutY="70.0" promptText="email" />
+      <RadioButton fx:id="personRad" layoutX="30.0" layoutY="119.0" mnemonicParsing="false" onAction="#changeVisibility" selected="true" text="Person">
+         <toggleGroup>
+            <ToggleGroup fx:id="customerType" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="LegalEntityRad" layoutX="213.0" layoutY="119.0" mnemonicParsing="false" onAction="#changeVisibility" text="Legal entity " toggleGroup="$customerType" />
+      <TextField fx:id="nameF" layoutX="31.0" layoutY="158.0" promptText="name" />
+      <TextField fx:id="companyNameF" layoutX="213.0" layoutY="158.0" promptText="company name" />
+      <TextField fx:id="surnameF" layoutX="31.0" layoutY="200.0" promptText="surname" />
+      <TextField fx:id="loginF" layoutX="214.0" layoutY="31.0" promptText="login" />
+      <TextField fx:id="passwordF" layoutX="214.0" layoutY="70.0" promptText="password" />
+      <Button layoutX="62.0" layoutY="269.0" mnemonicParsing="false" onAction="#saveAcc" text="Save Account" />
+      <Button layoutX="262.0" layoutY="269.0" mnemonicParsing="false" onAction="#returnToLogInPage" text="Cancel" />
+   </children>
 </AnchorPane>
