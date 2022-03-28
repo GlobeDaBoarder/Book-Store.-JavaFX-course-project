@@ -3,9 +3,12 @@ package book_store;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -25,6 +28,11 @@ public class Book {
     @Enumerated
     private eBookGenre genre;
     private boolean isAvailable = false;
+
+    @OneToMany(mappedBy = "bookComment", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OrderBy("id ASC")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Comment> comments;
 
     public Book(double price, String name, String author, String description, LocalDate releaseDate, int pageCount,
                 eBookLang lang, int quantityAvalible, eBookGenre genre) {

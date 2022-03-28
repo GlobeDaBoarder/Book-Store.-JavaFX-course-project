@@ -66,6 +66,23 @@ public class BookHibController {
         }
     }
 
+    public void editBook(Book book) {
+        EntityManager em = null;
+
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            em.merge(book);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
     public Book getBookById(int id) {
         EntityManager em = null;
         Book book = null;

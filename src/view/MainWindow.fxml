@@ -34,7 +34,16 @@
                         </HBox>
                         <VBox layoutX="14.0" layoutY="26.0" prefHeight="334.0" prefWidth="575.0">
                             <children>
-                                <ListView fx:id="bookList" prefHeight="335.0" prefWidth="575.0"/>
+                                <ListView fx:id="bookList" layoutX="11.0" layoutY="33.0" prefHeight="297.0" prefWidth="253.0">
+                                    <contextMenu>
+                                        <ContextMenu>
+                                            <items>
+                                                <MenuItem fx:id="comment" mnemonicParsing="false" onAction="#createComment" text="comment" />
+                                                <MenuItem fx:id="viewComments" mnemonicParsing="false" onAction="#viewComments" text="viewComments" />
+                                            </items>
+                                        </ContextMenu>
+                                    </contextMenu>
+                                </ListView>
                             </children>
                         </VBox>
                     </children>

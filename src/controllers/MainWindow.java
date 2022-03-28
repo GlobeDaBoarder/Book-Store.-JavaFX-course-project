@@ -24,6 +24,7 @@ import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainWindow implements Initializable {
@@ -44,6 +45,8 @@ public class MainWindow implements Initializable {
     public ComboBox bookLang;
     public Tab ShoppingCartTab;
     public Tab ManageUsersTab;
+    public MenuItem comment;
+    public MenuItem viewComments;
 
     private int userId;
 
@@ -53,19 +56,19 @@ public class MainWindow implements Initializable {
 
     private void modifyAccess() {
         User user = userHibController.getUserById(userId);
-        if (user.getClass() != Employee.class){
+        if (user.getClass() != Employee.class) {
             ManageBooksTab.setDisable(true);
             ManageUsersTab.setDisable(true);
-        }else{
+        } else {
             ManageBooksTab.setDisable(false);
             ManageUsersTab.setDisable(false);
         }
     }
 
     public void addBook() {
-        if(bookPrice.getText().isBlank() || bookTitle.getText().isBlank() || bookAuthor.getText().isBlank()
+        if (bookPrice.getText().isBlank() || bookTitle.getText().isBlank() || bookAuthor.getText().isBlank()
                 || bookDescription.getText().isBlank() || publDate.getValue() == null || pgNum.getText().isBlank()
-                || bookLang.getValue() == null || bookQuantity.getText().isBlank() || bookGenre.getValue() == null){
+                || bookLang.getValue() == null || bookQuantity.getText().isBlank() || bookGenre.getValue() == null) {
             AlertMessage.generateMessage("input error", "All fields should be non-empty");
             return;
         }
@@ -81,7 +84,7 @@ public class MainWindow implements Initializable {
         bookList.getItems().clear();
         bookListMngr.getItems().clear();
         List<Book> books = bookHibController.getAllBooks(true);
-        books.forEach(b -> bookList.getItems().add(b.getName() + " by " + b.getAuthor()));
+        books.forEach(b -> bookList.getItems().add(b.getProductID() + ": " + b.getName() + " by " + b.getAuthor()));
         books = bookHibController.getAllBooks(false);
         books.forEach(b -> bookListMngr.getItems().add(b.getProductID() + ": " + b.getName() + " by " + b.getAuthor() + "(Available: " + b.isAvailable() + ")"));
     }
@@ -133,5 +136,37 @@ public class MainWindow implements Initializable {
         int id = Integer.parseInt(bookListMngr.getSelectionModel().getSelectedItem().toString().split(":")[0]);
         bookHibController.removeBook(id);
         refreshTable();
+    }
+
+    public void createComment(ActionEvent actionEvent) {
+        int id = Integer.parseInt(bookList.getSelectionModel().getSelectedItem().toString().split(":")[0]);
+        Book book = bookHibController.getBookById(id);
+
+        TextInputDialog dialog = new TextInputDialog("enter comment text");
+        dialog.setTitle(book.getName());
+        dialog.setHeaderText("Say something good about this book:");
+        dialog.setContentText("");
+
+        // Traditional way to get the response value.
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            System.out.println("Your name: " + result.get());
+            Comment bookComment = new Comment(result.get(), book);
+            book.getComments().add(bookComment);
+            bookHibController.editBook(book);
+        }
+    }
+
+    public void viewComments(ActionEvent actionEvent) throws IOException {
+        int id = Integer.parseInt(bookList.getSelectionModel().getSelectedItem().toString().split(":")[0]);
+        FXMLLoader fxmlLoader = new FXMLLoader(LoginPage.class.getResource("../view/CommentsPage.fxml"));
+        Parent parent = fxmlLoader.load();
+        CommentsPage commentsPage = fxmlLoader.getController();
+        commentsPage.setBookId(id);
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
     }
 }
