@@ -1,8 +1,7 @@
-/*
 package WebSerializers;
 
+import book_store.User;
 import com.google.gson.*;
-import dsbook.User;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -20,4 +19,3 @@ public class UsersListGsonSerializer implements JsonSerializer<List<User>> {
         return jsonArray;
     }
 }
-*/

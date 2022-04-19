@@ -3,6 +3,7 @@ package webControllers;
 import WebSerializers.EmployeeSerializer;
 import WebSerializers.LegalEntitySerilizer;
 import WebSerializers.LocalDateGsonSerializer;
+import WebSerializers.UsersListGsonSerializer;
 import book_store.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -97,8 +98,8 @@ public class UserWeb {
         return "Fail";
     }
 
-    /*
-    @RequestMapping(value = "/users/deleteUser/{id}", method = RequestMethod.DELETE)
+
+    @RequestMapping(value = "/user/deleteUser/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public String deleteUserWeb(@PathVariable(name = "id") int id) {
@@ -109,7 +110,8 @@ public class UserWeb {
         else return "Not deleted";
     }
 
-    @RequestMapping(value = "/users/getAllUsers", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/user/getAllUsers", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public String getAllWebUsers() {
@@ -120,33 +122,50 @@ public class UserWeb {
         }.getType();
         gson.registerTypeAdapter(userList, new UsersListGsonSerializer())
                 .registerTypeAdapter(LocalDate.class, new LocalDateGsonSerializer())
-                .registerTypeAdapter(Individual.class, new IndividualGsonSerializer());
+                .registerTypeAdapter(Employee.class, new EmployeeSerializer());
         Gson parser = gson.create();
         return parser.toJson(users);
     }
 
-    @RequestMapping(value = "/users/updateUser", method = RequestMethod.PUT)
+    @RequestMapping(value = "/user/updateUser", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public String updateWebUser(@RequestBody String request) {
         Gson parser = new Gson();
         Properties data = parser.fromJson(request, Properties.class);
-        Individual individual = null;
-        LegalPerson legalPerson = null;
-        if (data.getProperty("userType").equals("I")) {
-            individual = (Individual) userHibController.getUserById(Integer.parseInt(data.getProperty("id")));
-
-            individual.setName(data.getProperty("name"));
-            individual.setEmail(data.getProperty("email"));
-            userHibController.updateUser(individual);
+        Person person = null;
+        Employee employee = null;
+        LegalEntity legalEntity = null;
+        if (data.getProperty("DTYPE").equals("Employee")) {
+            employee = (Employee) userHibController.getUserById(Integer.parseInt(data.getProperty("id")));
+            employee.setLogin(data.getProperty("login"));
+            employee.setPassword(data.getProperty("password"));
+            employee.setPos(eEmpPositions.valueOf(data.getProperty("pos")));
+            userHibController.updateUser(employee);
             return "Updated";
-        } else if (data.getProperty("userType").equals("L")) {
-            //finish specific
-            return "Updated";
-        } else {
-            return "No such user type, unable to update";
         }
-    }
+        if (data.getProperty("DTYPE").equals("Person")) {
+            person = (Person) userHibController.getUserById(Integer.parseInt(data.getProperty("id")));
+            person.setLogin(data.getProperty("login"));
+            person.setPassword(data.getProperty("password"));
+            person.setEmail(data.getProperty("email"));
+            person.setPhone(data.getProperty("phone"));
+            person.setName(data.getProperty("name"));
+            person.setSurname(data.getProperty("surname"));
+            userHibController.updateUser(person);
+            return "Updated";
+        }
+        if (data.getProperty("DTYPE").equals("LegalEntity")){
+            legalEntity = (LegalEntity) userHibController.getUserById(Integer.parseInt(data.getProperty("id")));
+            legalEntity.setLogin(data.getProperty("login"));
+            legalEntity.setPassword(data.getProperty("password"));
+            legalEntity.setEmail(data.getProperty("email"));
+            legalEntity.setPhone(data.getProperty("phone"));
+            legalEntity.setCompanyName(data.getProperty("companyName"));
+            userHibController.updateUser(legalEntity);
+            return "Updated";
+        }
 
-     */
+        return "Fail";
+    }
 }
