@@ -3,10 +3,7 @@ package webControllers;
 import WebSerializers.EmployeeSerializer;
 import WebSerializers.LegalEntitySerilizer;
 import WebSerializers.LocalDateGsonSerializer;
-import book_store.Employee;
-import book_store.LegalEntity;
-import book_store.Person;
-import book_store.User;
+import book_store.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -57,39 +54,50 @@ public class UserWeb {
             return (builder.create().toJson(legalEntity, LegalEntity.class));
         }
     }
-    /*
-    @RequestMapping(value = "/users/addUser", method = RequestMethod.POST)
+
+    @RequestMapping(value = "/user/addUser", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public String addWebUser(@RequestBody String request) {
         Gson parser = new Gson();
         Properties data = parser.fromJson(request, Properties.class);
-        Individual individual = null;
-        LegalPerson legalPerson = null;
-        if (data.getProperty("userType").equals("I")) {
-            userHibController.createUser(new Individual(data.getProperty("login"),
-                    data.getProperty("psw"),
-                    UserType.valueOf(data.getProperty("role")),
-                    data.getProperty("name"),
-                    data.getProperty("surname"),
-                    data.getProperty("email")));
-            individual = (Individual) userHibController.getUserByLoginData(data.getProperty("login"), data.getProperty("psw"));
-        } else if (data.getProperty("userType").equals("L")) {
-            //finish specific
-            legalPerson = (LegalPerson) userHibController.getUserByLoginData(data.getProperty("login"), data.getProperty("psw"));
+        Person person = null;
+        Employee employee = null;
+        LegalEntity legalEntity = null;
+        if (data.getProperty("DTYPE").equals("Employee")) {
+            userHibController.createUser(new Employee(data.getProperty("login"), data.getProperty("password"),
+                    eEmpPositions.valueOf(data.getProperty("pos"))));
+            employee = (Employee) userHibController.getUserByLoginData(data.getProperty("login"), data.getProperty("password"));
+        } else if (data.getProperty("DTYPE").equals("Person")) {
+            userHibController.createUser((new Person(data.getProperty("login"), data.getProperty("password"),
+                    data.getProperty("email"), data.getProperty("phone"), data.getProperty("name"),
+                    data.getProperty("surname"))));
+            person = (Person) userHibController.getUserByLoginData(data.getProperty("login"), data.getProperty("password"));
+        } else if (data.getProperty("DTYPE").equals("LegalEntity")){
+            userHibController.createUser(new Person(data.getProperty("login"), data.getProperty("password"),
+                    data.getProperty("email"), data.getProperty("phone"), data.getProperty("name"),
+                    data.getProperty("companyName")));
+            legalEntity = (LegalEntity) userHibController.getUserByLoginData(data.getProperty("login"), data.getProperty("password"));
+        }else{
+            return "no such user type";
         }
 
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(LocalDate.class, new LocalDateGsonSerializer());
-        if (individual != null) {
+        if (employee != null) {
 
-            return (builder.create().toJson(individual, Individual.class));
-        } else if (legalPerson != null) {
-            return (builder.create().toJson(legalPerson, LegalPerson.class));
+            return (builder.create().toJson(employee, Employee.class));
+        }
+        if ( person!= null) {
+            return (builder.create().toJson(person, Person.class));
+        }
+        if ( legalEntity!= null) {
+            return (builder.create().toJson(legalEntity, LegalEntity.class));
         }
         return "Fail";
     }
 
+    /*
     @RequestMapping(value = "/users/deleteUser/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
