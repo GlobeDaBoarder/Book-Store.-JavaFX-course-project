@@ -86,7 +86,7 @@ public class BookWeb {
     @RequestMapping(value = "/book/updateBook", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
-    public String updateWebUser(@RequestBody String request) {
+    public String updateWebBook(@RequestBody String request) {
         Gson parser = new Gson();
         Properties data = parser.fromJson(request, Properties.class);
         Book book =  bookHibController.getBookById(Integer.parseInt(data.getProperty("id")));
