@@ -1,0 +1,25 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="new-gui:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/new_gui_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="new-gui/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="new-gui" />
+          <element id="jpa-descriptors" facet="new-gui/jpa/JPA" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="projectlombok.lombok" />
+          <element id="library" level="project" name="mysql.connector.java" />
+          <element id="library" level="project" name="Hibernate 5.4.11-5.4.11" />
+          <element id="library" level="project" name="JPA 2.2-2.2" />
+          <element id="library" level="project" name="Spring-5.2.3.RELEASE" />
+          <element id="library" level="project" name="Spring Web Services-2.0.2" />
+          <element id="library" level="project" name="Spring MVC-5.2.3.RELEASE" />
+          <element id="library" level="project" name="Spring Security-5.2.1" />
+          <element id="library" level="project" name="google.code.gson" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
