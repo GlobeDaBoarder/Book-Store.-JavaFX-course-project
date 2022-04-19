@@ -15,7 +15,6 @@
             <props>
                 <prop key="/user">user</prop>
                 <prop key="/book">book</prop>
-                <prop key="/cart">cart</prop>
             </props>
         </property>
     </bean>
@@ -26,9 +25,6 @@
 
     <bean name="book"
           class="webControllers.BookWeb"
-    />
-    <bean name="cart"
-          class="webControllers.CartWeb"
     />
     <bean name="user"
           class="webControllers.UserWeb"
