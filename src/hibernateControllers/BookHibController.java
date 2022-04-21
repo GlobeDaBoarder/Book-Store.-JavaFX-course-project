@@ -1,6 +1,8 @@
 package hibernateControllers;
 
 import book_store.Book;
+import book_store.eBookGenre;
+import book_store.eBookLang;
 
 
 import javax.persistence.EntityManager;
@@ -8,7 +10,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BookHibController {
@@ -127,6 +131,37 @@ public class BookHibController {
             Root<Book> root = query.from(Book.class);
             if (onlyAvailableBooks)
                 query.select(root).where(cb.equal(root.get("isAvailable"), true));
+            Query q = em.createQuery(query);
+            return q.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
+
+    public List<Book> getFilteredBooks(String lang, String genre, String price_from, String price_to){
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Book> query = cb.createQuery(Book.class);
+            Root<Book> root = query.from(Book.class);
+
+            List<Predicate> predicates = new ArrayList<Predicate>();
+
+            if (!price_from.isBlank())
+                predicates.add(cb.greaterThanOrEqualTo(root.get("price"), Integer.parseInt(price_from)));
+            if (!price_to.isBlank())
+                predicates.add(cb.lessThanOrEqualTo(root.get("price"), Integer.parseInt(price_to)));
+            if(lang != "All")
+                predicates.add(cb.equal(root.get("lang"), eBookLang.valueOf(lang)));
+            if(genre != "All")
+                predicates.add(cb.equal(root.get("genre"), eBookGenre.valueOf(genre)));
+
+            query.select(root).where(predicates.toArray(new Predicate[]{}));
             Query q = em.createQuery(query);
             return q.getResultList();
         } catch (Exception e) {

@@ -47,6 +47,10 @@ public class MainWindow implements Initializable {
     public Tab ManageUsersTab;
     public MenuItem comment;
     public MenuItem viewComments;
+    public ComboBox genreCmb;
+    public TextField priceFromF;
+    public TextField priceToF;
+    public ComboBox languageCmb;
 
     private int userId;
 
@@ -77,13 +81,12 @@ public class MainWindow implements Initializable {
                 eBookLang.valueOf(bookLang.getSelectionModel().getSelectedItem().toString()), Integer.parseInt(bookQuantity.getText()),
                 eBookGenre.valueOf(bookGenre.getSelectionModel().getSelectedItem().toString()));
         bookHibController.createBook(book);
-        refreshTable();
+        refreshBookLists(bookHibController.getAllBooks(false));
     }
 
-    private void refreshTable() {
+    private void refreshBookLists(List<Book> books) {
         bookList.getItems().clear();
         bookListMngr.getItems().clear();
-        List<Book> books = bookHibController.getAllBooks(true);
         books.forEach(b -> bookList.getItems().add(b.getProductID() + ": " + b.getName() + " by " + b.getAuthor()));
         books = bookHibController.getAllBooks(false);
         books.forEach(b -> bookListMngr.getItems().add(b.getProductID() + ": " + b.getName() + " by " + b.getAuthor() + "(Available: " + b.isAvailable() + ")"));
@@ -96,9 +99,16 @@ public class MainWindow implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        genreCmb.getItems().add("All");
+        genreCmb.getItems().addAll(eBookGenre.values());
+        genreCmb.setValue("All");
+        languageCmb.getItems().add("All");
+        languageCmb.getItems().addAll(eBookLang.values());
+        languageCmb.setValue("All");
+
         bookGenre.getItems().addAll(eBookGenre.values());
         bookLang.getItems().addAll(eBookLang.values());
-        refreshTable();
+        refreshBookLists(bookHibController.getAllBooks(false));
     }
 
     public void openAddUserPage(ActionEvent actionEvent) throws IOException {
@@ -128,14 +138,14 @@ public class MainWindow implements Initializable {
         stage.setScene(scene);
         stage.showAndWait();
 
-        refreshTable();
+        refreshBookLists(bookHibController.getAllBooks(false));
 
     }
 
     public void deleteSelected(ActionEvent actionEvent) {
         int id = Integer.parseInt(bookListMngr.getSelectionModel().getSelectedItem().toString().split(":")[0]);
         bookHibController.removeBook(id);
-        refreshTable();
+        refreshBookLists(bookHibController.getAllBooks(false));
     }
 
     public void createComment(ActionEvent actionEvent) {
@@ -168,5 +178,12 @@ public class MainWindow implements Initializable {
         stage.setScene(scene);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
+    }
+
+
+    public void filterBooks() {
+        List<Book> books = bookHibController.getFilteredBooks(languageCmb.getValue().toString(), genreCmb.getValue().toString(),
+                priceFromF.getText(), priceToF.getText());
+        refreshBookLists(books);
     }
 }
