@@ -6,6 +6,7 @@ import book_store.eBookGenre;
 import book_store.eBookLang;
 import hibernateControllers.BookHibController;
 import javafx.event.ActionEvent;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
@@ -13,8 +14,10 @@ import javafx.scene.control.TextField;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class EditBookPage {
+public class EditBookPage implements Initializable {
     public TextField bookTitle;
     public TextArea bookDescription;
     public ComboBox bookGenre;
@@ -67,4 +70,9 @@ public class EditBookPage {
     }
 
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        bookGenre.getItems().addAll(eBookGenre.values());
+        bookLang.getItems().addAll(eBookLang.values());
+    }
 }

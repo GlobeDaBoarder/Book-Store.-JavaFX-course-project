@@ -383,7 +383,7 @@ public class MainWindow implements Initializable {
         modifyAccess();
     }
 
-    public void openAddUserPage(ActionEvent actionEvent) throws IOException {
+    public void openAddUserPage(ActionEvent actionEvent) throws IOException, SQLException {
         FXMLLoader fxmlLoader = new FXMLLoader(StartController.class.getResource("../view/addUserPage.fxml"));
         Parent parent = fxmlLoader.load();
 
@@ -393,6 +393,8 @@ public class MainWindow implements Initializable {
         stage.setTitle("User Management");
         stage.setScene(scene);
         stage.showAndWait();
+
+        refreshTable();
     }
 
     public void editSelected(ActionEvent actionEvent) throws IOException {
