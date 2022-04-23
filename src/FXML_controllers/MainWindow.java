@@ -3,6 +3,8 @@ package FXML_controllers;
 import book_store.*;
 import hibernateControllers.BookHibController;
 import hibernateControllers.UserHibController;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +12,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -17,6 +21,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -45,11 +50,15 @@ public class MainWindow implements Initializable {
     public TextField priceFromF;
     public TextField priceToF;
     public ComboBox languageCmb;
+
     public TableView usersTable;
-    public TableColumn idCol;
-    public TableColumn userTypeCol;
-    public TableColumn loginCol;
-    public TableColumn createDateCol;
+
+    public TableColumn<UsersTableParams, String> idCol;
+    public TableColumn<UsersTableParams, String> userTypeCol;
+    public TableColumn<UsersTableParams, String> loginCol;
+    public TableColumn<UsersTableParams, String>createDateCol;
+
+    private ObservableList<UsersTableParams> data = FXCollections.observableArrayList();
 
     private int userId;
 
@@ -91,6 +100,20 @@ public class MainWindow implements Initializable {
         books.forEach(b -> bookListMngr.getItems().add(b.getProductID() + ": " + b.getName() + " by " + b.getAuthor() + "(Available: " + b.isAvailable() + ")"));
     }
 
+    private void refreshTable(List<User> userList) throws SQLException {
+        usersTable.getItems().clear();
+        usersTable.setEditable(true);
+        for (User p : userList) {
+            UsersTableParams empTableParams = new UsersTableParams();
+            empTableParams.setId(String.valueOf(p.getId()));
+            empTableParams.setLogin(p.getLogin());
+            empTableParams.setCreateDate(p.getCreateDate().toString());
+            data.add(empTableParams);
+        }
+
+        usersTable.setItems(data);
+    }
+
     public void setUserId(int userId) {
         this.userId = userId;
         modifyAccess();
@@ -108,6 +131,33 @@ public class MainWindow implements Initializable {
         bookGenre.getItems().addAll(eBookGenre.values());
         bookLang.getItems().addAll(eBookLang.values());
         refreshBookLists(bookHibController.getAllBooks(false));
+
+        usersTable.getItems().clear();
+
+        idCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("id"));
+        idCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        idCol.setOnEditCommit(
+                t -> t.getTableView().getItems().get(
+                        t.getTablePosition().getRow()).setId(t.getNewValue())
+        );
+        loginCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("login"));
+        loginCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        loginCol.setOnEditCommit(
+                t -> t.getTableView().getItems().get(
+                        t.getTablePosition().getRow()).setLogin(t.getNewValue())
+        );
+        createDateCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("createDate"));
+        createDateCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        createDateCol.setOnEditCommit(
+                t -> t.getTableView().getItems().get(
+                        t.getTablePosition().getRow()).setCreateDate(t.getNewValue())
+        );
+
+        try {
+            refreshTable(userHibController.getAllUsers());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void openAddUserPage(ActionEvent actionEvent) throws IOException {
