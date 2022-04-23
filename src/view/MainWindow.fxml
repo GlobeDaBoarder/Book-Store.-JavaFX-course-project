@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="604.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXML_controllers.MainWindow">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXML_controllers.MainWindow">
     <tabs>
         <Tab fx:id="BookShopListTab" text="Books">
             <content>
@@ -86,7 +86,7 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="371.0" prefWidth="689.0">
                     <children>
-                        <TableView fx:id="usersTable" layoutX="14.0" layoutY="14.0" prefHeight="298.0" prefWidth="580.0">
+                        <TableView fx:id="usersTable" layoutX="14.0" layoutY="14.0" prefHeight="298.0" prefWidth="575.0">
                             <columns>
                                 <TableColumn fx:id="idCol" prefWidth="33.599974632263184" text="id" />
                                 <TableColumn fx:id="userTypeCol" prefWidth="61.600040435791016" text="user type " />
@@ -98,6 +98,7 @@
                         <TableColumn fx:id="nameCol" prefWidth="67.20001220703125" text="name" />
                         <TableColumn fx:id="surnameCol" prefWidth="54.4000244140625" text="surname" />
                         <TableColumn fx:id="companyNameCol" prefWidth="96.7999267578125" text="companyName" />
+                        <TableColumn fx:id="actionColBtn" prefWidth="75.0" text="Action" />
                             </columns>
                         </TableView>
                         <Button layoutX="274.0" layoutY="331.0" mnemonicParsing="false" onAction="#openAddUserPage" text="Add User" />

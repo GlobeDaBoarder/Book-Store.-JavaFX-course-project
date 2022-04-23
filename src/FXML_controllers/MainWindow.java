@@ -16,6 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -63,6 +64,7 @@ public class MainWindow implements Initializable {
     public TableColumn<UsersTableParams, String> nameCol;
     public TableColumn<UsersTableParams, String> surnameCol;
     public TableColumn<UsersTableParams, String> companyNameCol;
+    public TableColumn<UsersTableParams, Void> actionColBtn;
 
     private ObservableList<UsersTableParams> data = FXCollections.observableArrayList();
 
@@ -147,6 +149,42 @@ public class MainWindow implements Initializable {
                 t -> t.getTableView().getItems().get(
                         t.getTablePosition().getRow()).setCompanyName(t.getNewValue())
         );
+
+        Callback<TableColumn<UsersTableParams, Void>, TableCell<UsersTableParams, Void>> cellFactory
+                = new Callback<TableColumn<UsersTableParams, Void>, TableCell<UsersTableParams, Void>>() {
+            @Override
+            public TableCell<UsersTableParams, Void> call(final TableColumn<UsersTableParams, Void> param) {
+                final TableCell<UsersTableParams, Void> cell = new TableCell<UsersTableParams, Void>() {
+
+                    private final Button button = new Button("Delete");
+
+                    {
+                        button.setOnAction((ActionEvent event) -> {
+                            UsersTableParams data = getTableView().getItems().get(getIndex());
+                            userHibController.removeUser(Integer.parseInt(data.getId()));
+                            try {
+                                refreshTable();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(button);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+
+        actionColBtn.setCellFactory(cellFactory);
 
         try {
             refreshTable();
@@ -318,4 +356,5 @@ public class MainWindow implements Initializable {
                 priceFromF.getText(), priceToF.getText());
         refreshBookLists(books);
     }
+
 }
