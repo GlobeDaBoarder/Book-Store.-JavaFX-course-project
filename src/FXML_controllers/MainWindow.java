@@ -66,6 +66,53 @@ public class MainWindow implements Initializable {
     BookHibController bookHibController = new BookHibController(entityManagerFactory);
     UserHibController userHibController = new UserHibController(entityManagerFactory);
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        genreCmb.getItems().add("All");
+        genreCmb.getItems().addAll(eBookGenre.values());
+        genreCmb.setValue("All");
+        languageCmb.getItems().add("All");
+        languageCmb.getItems().addAll(eBookLang.values());
+        languageCmb.setValue("All");
+
+        bookGenre.getItems().addAll(eBookGenre.values());
+        bookLang.getItems().addAll(eBookLang.values());
+        refreshBookLists(bookHibController.getAllBooks(false));
+
+        usersTable.getItems().clear();
+
+        idCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("id"));
+        idCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        idCol.setOnEditCommit(
+                t -> t.getTableView().getItems().get(
+                        t.getTablePosition().getRow()).setId(t.getNewValue())
+        );
+        userTypeCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("userType"));
+        userTypeCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        userTypeCol.setOnEditCommit(
+                t -> t.getTableView().getItems().get(
+                        t.getTablePosition().getRow()).setUserType(t.getNewValue())
+        );
+        loginCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("login"));
+        loginCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        loginCol.setOnEditCommit(
+                t -> t.getTableView().getItems().get(
+                        t.getTablePosition().getRow()).setLogin(t.getNewValue())
+        );
+        createDateCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("createDate"));
+        createDateCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        createDateCol.setOnEditCommit(
+                t -> t.getTableView().getItems().get(
+                        t.getTablePosition().getRow()).setCreateDate(t.getNewValue())
+        );
+
+        try {
+            refreshTable(userHibController.getAllUsers());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void modifyAccess() {
         User user = userHibController.getUserById(userId);
         if (user.getClass() != Employee.class) {
@@ -103,11 +150,12 @@ public class MainWindow implements Initializable {
     private void refreshTable(List<User> userList) throws SQLException {
         usersTable.getItems().clear();
         usersTable.setEditable(true);
-        for (User p : userList) {
+        for (User u : userList) {
             UsersTableParams empTableParams = new UsersTableParams();
-            empTableParams.setId(String.valueOf(p.getId()));
-            empTableParams.setLogin(p.getLogin());
-            empTableParams.setCreateDate(p.getCreateDate().toString());
+            empTableParams.setId(String.valueOf(u.getId()));
+            empTableParams.setUserType(u.getClass().getSimpleName());
+            empTableParams.setLogin(u.getLogin());
+            empTableParams.setCreateDate(u.getCreateDate().toString());
             data.add(empTableParams);
         }
 
@@ -117,47 +165,6 @@ public class MainWindow implements Initializable {
     public void setUserId(int userId) {
         this.userId = userId;
         modifyAccess();
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        genreCmb.getItems().add("All");
-        genreCmb.getItems().addAll(eBookGenre.values());
-        genreCmb.setValue("All");
-        languageCmb.getItems().add("All");
-        languageCmb.getItems().addAll(eBookLang.values());
-        languageCmb.setValue("All");
-
-        bookGenre.getItems().addAll(eBookGenre.values());
-        bookLang.getItems().addAll(eBookLang.values());
-        refreshBookLists(bookHibController.getAllBooks(false));
-
-        usersTable.getItems().clear();
-
-        idCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("id"));
-        idCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        idCol.setOnEditCommit(
-                t -> t.getTableView().getItems().get(
-                        t.getTablePosition().getRow()).setId(t.getNewValue())
-        );
-        loginCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("login"));
-        loginCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        loginCol.setOnEditCommit(
-                t -> t.getTableView().getItems().get(
-                        t.getTablePosition().getRow()).setLogin(t.getNewValue())
-        );
-        createDateCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("createDate"));
-        createDateCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        createDateCol.setOnEditCommit(
-                t -> t.getTableView().getItems().get(
-                        t.getTablePosition().getRow()).setCreateDate(t.getNewValue())
-        );
-
-        try {
-            refreshTable(userHibController.getAllUsers());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     public void openAddUserPage(ActionEvent actionEvent) throws IOException {

@@ -6,24 +6,26 @@ import lombok.Data;
 
 public class UsersTableParams {
     private SimpleStringProperty id = new SimpleStringProperty();
+    private SimpleStringProperty userType = new SimpleStringProperty();
     private SimpleStringProperty login = new SimpleStringProperty();
     private SimpleStringProperty createDate = new SimpleStringProperty();
 
-    public UsersTableParams(SimpleStringProperty id, SimpleStringProperty login, SimpleStringProperty createDate) {
+    public UsersTableParams(SimpleStringProperty id, SimpleStringProperty userType, SimpleStringProperty login, SimpleStringProperty createDate) {
         this.id = id;
+        this.userType = userType;
         this.login = login;
         this.createDate = createDate;
     }
 
-    public UsersTableParams(String id, String login, String createDate) {
+    public UsersTableParams(String id, String userType, String login, String createDate) {
         this.id = new SimpleStringProperty(id);
+        this.userType = new SimpleStringProperty(userType);
         this.login = new SimpleStringProperty(login);
         this.createDate = new SimpleStringProperty(createDate);
     }
 
     public UsersTableParams() {
     }
-
 
     public String getId() {
         return id.get();
@@ -35,6 +37,18 @@ public class UsersTableParams {
 
     public void setId(String id) {
         this.id.set(id);
+    }
+
+    public String getUserType() {
+        return userType.get();
+    }
+
+    public SimpleStringProperty userTypeProperty() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType.set(userType);
     }
 
     public String getLogin() {
