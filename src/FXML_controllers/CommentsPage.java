@@ -1,10 +1,8 @@
-package controllers;
+package FXML_controllers;
 
 import book_store.Book;
 import hibernateControllers.BookHibController;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;

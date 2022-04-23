@@ -1,4 +1,4 @@
-package controllers;
+package FXML_controllers;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;

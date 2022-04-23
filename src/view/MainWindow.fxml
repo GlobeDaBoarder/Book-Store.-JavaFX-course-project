@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainWindow">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXML_controllers.MainWindow">
     <tabs>
         <Tab fx:id="BookShopListTab" text="Books">
             <content>
@@ -86,13 +86,16 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <TableView layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="572.0">
+                        <TableView fx:id="usersTable" layoutX="14.0" layoutY="14.0" prefHeight="298.0" prefWidth="572.0">
                             <columns>
-                                <TableColumn prefWidth="75.0" text="C1" />
-                                <TableColumn prefWidth="75.0" text="C2" />
+                                <TableColumn fx:id="idCol" prefWidth="75.0" text="id" />
+                                <TableColumn fx:id="userTypeCol" prefWidth="75.0" text="user type " />
+                        <TableColumn fx:id="loginCol" prefWidth="75.0" text="login" />
+                        <TableColumn fx:id="createDateCol" prefWidth="75.0" text="date created" />
+                        <TableColumn prefWidth="75.0" text="Column X" />
                             </columns>
                         </TableView>
-                        <Button layoutX="274.0" layoutY="264.0" mnemonicParsing="false" onAction="#openAddUserPage" text="Add User" />
+                        <Button layoutX="274.0" layoutY="331.0" mnemonicParsing="false" onAction="#openAddUserPage" text="Add User" />
                     </children>
                 </AnchorPane>
             </content>

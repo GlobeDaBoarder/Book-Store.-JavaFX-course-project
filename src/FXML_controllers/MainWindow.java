@@ -1,4 +1,4 @@
-package controllers;
+package FXML_controllers;
 
 import book_store.*;
 import hibernateControllers.BookHibController;
@@ -17,12 +17,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -51,6 +45,11 @@ public class MainWindow implements Initializable {
     public TextField priceFromF;
     public TextField priceToF;
     public ComboBox languageCmb;
+    public TableView usersTable;
+    public TableColumn idCol;
+    public TableColumn userTypeCol;
+    public TableColumn loginCol;
+    public TableColumn createDateCol;
 
     private int userId;
 

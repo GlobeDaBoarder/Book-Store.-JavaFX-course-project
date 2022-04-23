@@ -1,4 +1,4 @@
-package controllers;
+package FXML_controllers;
 
 import book_store.AlertMessage;
 import book_store.User;
@@ -7,7 +7,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
