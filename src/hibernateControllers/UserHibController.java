@@ -1,5 +1,8 @@
 package hibernateControllers;
 
+import book_store.Employee;
+import book_store.LegalEntity;
+import book_store.Person;
 import book_store.User;
 
 import javax.persistence.EntityManager;
@@ -122,5 +125,56 @@ public class UserHibController {
                 em.close();
             }
         }
+    }
+
+    public List<Employee> getAllEmployees() {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery query = em.getCriteriaBuilder().createQuery();
+            query.select(query.from(Employee.class));
+            Query q = em.createQuery(query);
+            return q.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
+
+    public List<Person> getAllPersons() {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery query = em.getCriteriaBuilder().createQuery();
+            query.select(query.from(Person.class));
+            Query q = em.createQuery(query);
+            return q.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
+
+    public List<LegalEntity> getAllLegalEntities() {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery query = em.getCriteriaBuilder().createQuery();
+            query.select(query.from(LegalEntity.class));
+            Query q = em.createQuery(query);
+            return q.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
     }
 }

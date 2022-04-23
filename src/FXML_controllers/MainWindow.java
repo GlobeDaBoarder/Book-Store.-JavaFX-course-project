@@ -56,7 +56,13 @@ public class MainWindow implements Initializable {
     public TableColumn<UsersTableParams, String> idCol;
     public TableColumn<UsersTableParams, String> userTypeCol;
     public TableColumn<UsersTableParams, String> loginCol;
-    public TableColumn<UsersTableParams, String>createDateCol;
+    public TableColumn<UsersTableParams, String> createDateCol;
+    public TableColumn<UsersTableParams, String> emailCol;
+    public TableColumn<UsersTableParams, String> posCol;
+    public TableColumn<UsersTableParams, String> phoneCol;
+    public TableColumn<UsersTableParams, String> nameCol;
+    public TableColumn<UsersTableParams, String> surnameCol;
+    public TableColumn<UsersTableParams, String> companyNameCol;
 
     private ObservableList<UsersTableParams> data = FXCollections.observableArrayList();
 
@@ -105,9 +111,45 @@ public class MainWindow implements Initializable {
                 t -> t.getTableView().getItems().get(
                         t.getTablePosition().getRow()).setCreateDate(t.getNewValue())
         );
+        posCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("pos"));
+        posCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        posCol.setOnEditCommit(
+                t -> t.getTableView().getItems().get(
+                        t.getTablePosition().getRow()).setPos(t.getNewValue())
+        );
+        emailCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("email"));
+        emailCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        emailCol.setOnEditCommit(
+                t -> t.getTableView().getItems().get(
+                        t.getTablePosition().getRow()).setEmail(t.getNewValue())
+        );
+        phoneCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("phone"));
+        phoneCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        phoneCol.setOnEditCommit(
+                t -> t.getTableView().getItems().get(
+                        t.getTablePosition().getRow()).setPhone(t.getNewValue())
+        );
+        nameCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("name"));
+        nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        nameCol.setOnEditCommit(
+                t -> t.getTableView().getItems().get(
+                        t.getTablePosition().getRow()).setName(t.getNewValue())
+        );
+        surnameCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("surname"));
+        surnameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        surnameCol.setOnEditCommit(
+                t -> t.getTableView().getItems().get(
+                        t.getTablePosition().getRow()).setSurname(t.getNewValue())
+        );
+        companyNameCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("companyName"));
+        companyNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        companyNameCol.setOnEditCommit(
+                t -> t.getTableView().getItems().get(
+                        t.getTablePosition().getRow()).setCompanyName(t.getNewValue())
+        );
 
         try {
-            refreshTable(userHibController.getAllUsers());
+            refreshTable();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -147,15 +189,49 @@ public class MainWindow implements Initializable {
         books.forEach(b -> bookListMngr.getItems().add(b.getProductID() + ": " + b.getName() + " by " + b.getAuthor() + "(Available: " + b.isAvailable() + ")"));
     }
 
-    private void refreshTable(List<User> userList) throws SQLException {
+    private void refreshTable() throws SQLException {
         usersTable.getItems().clear();
         usersTable.setEditable(true);
-        for (User u : userList) {
+
+        List<Employee> employeeList = userHibController.getAllEmployees();
+        for (Employee employee : employeeList) {
             UsersTableParams empTableParams = new UsersTableParams();
-            empTableParams.setId(String.valueOf(u.getId()));
-            empTableParams.setUserType(u.getClass().getSimpleName());
-            empTableParams.setLogin(u.getLogin());
-            empTableParams.setCreateDate(u.getCreateDate().toString());
+            empTableParams.setId(String.valueOf(employee.getId()));
+            empTableParams.setUserType(employee.getClass().getSimpleName());
+            empTableParams.setLogin(employee.getLogin());
+            empTableParams.setCreateDate(employee.getCreateDate().toString());
+
+            empTableParams.setPos(employee.getPos().toString());
+            data.add(empTableParams);
+        }
+
+        List<Person> personList = userHibController.getAllPersons();
+        for (Person person : personList) {
+            UsersTableParams empTableParams = new UsersTableParams();
+            empTableParams.setId(String.valueOf(person.getId()));
+            empTableParams.setUserType(person.getClass().getSimpleName());
+            empTableParams.setLogin(person.getLogin());
+            empTableParams.setCreateDate(person.getCreateDate().toString());
+
+            empTableParams.setEmail(person.getEmail());
+            empTableParams.setPhone(person.getPhone());
+            empTableParams.setName(person.getName());
+            empTableParams.setSurname(person.getSurname());
+            data.add(empTableParams);
+        }
+
+        List<LegalEntity> legalEntities = userHibController.getAllLegalEntities();
+        for (LegalEntity legalEntity  : legalEntities) {
+            UsersTableParams empTableParams = new UsersTableParams();
+            empTableParams.setId(String.valueOf(legalEntity.getId()));
+            empTableParams.setUserType(legalEntity.getClass().getSimpleName());
+            empTableParams.setLogin(legalEntity.getLogin());
+            empTableParams.setCreateDate(legalEntity.getCreateDate().toString());
+
+            empTableParams.setEmail(legalEntity.getEmail());
+            empTableParams.setPhone(legalEntity.getPhone());
+
+            empTableParams.setCompanyName(legalEntity.getCompanyName());
             data.add(empTableParams);
         }
 
