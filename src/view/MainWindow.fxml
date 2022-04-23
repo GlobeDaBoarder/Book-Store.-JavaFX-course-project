@@ -88,10 +88,10 @@
                     <children>
                         <TableView fx:id="usersTable" layoutX="14.0" layoutY="14.0" prefHeight="298.0" prefWidth="575.0">
                             <columns>
-                                <TableColumn fx:id="idCol" prefWidth="33.599974632263184" text="id" />
-                                <TableColumn fx:id="userTypeCol" prefWidth="61.600040435791016" text="user type " />
+                                <TableColumn fx:id="idCol" editable="false" prefWidth="33.599974632263184" text="id" />
+                                <TableColumn fx:id="userTypeCol" editable="false" prefWidth="61.600040435791016" text="user type " />
                         <TableColumn fx:id="loginCol" prefWidth="48.0" text="login" />
-                        <TableColumn fx:id="createDateCol" prefWidth="96.0" text="date created" />
+                        <TableColumn fx:id="createDateCol" editable="false" prefWidth="96.0" text="date created" />
                         <TableColumn fx:id="posCol" prefWidth="64.00004577636719" text="pos" />
                         <TableColumn fx:id="emailCol" prefWidth="75.20001220703125" text="email" />
                         <TableColumn fx:id="phoneCol" prefWidth="67.20001220703125" text="phone" />
