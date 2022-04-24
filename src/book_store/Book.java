@@ -33,6 +33,8 @@ public class Book {
     @OrderBy("id ASC")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments;
+    @ManyToMany
+    private List<ShopingCart> inOrders;
 
     public Book(double price, String name, String author, String description, LocalDate releaseDate, int pageCount,
                 eBookLang lang, int quantityAvalible, eBookGenre genre) {

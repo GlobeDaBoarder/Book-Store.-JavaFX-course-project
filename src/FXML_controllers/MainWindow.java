@@ -91,253 +91,261 @@ public class MainWindow implements Initializable {
         bookLang.getItems().addAll(eBookLang.values());
         refreshBookLists(bookHibController.getAllBooks(false));
 
-        usersTable.getItems().clear();
+        //User table actions
+        {
+            usersTable.getItems().clear();
 
-        idCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("id"));
-        idCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        idCol.setOnEditCommit(
-                t -> t.getTableView().getItems().get(
-                        t.getTablePosition().getRow()).setId(t.getNewValue())
-        );
-        userTypeCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("userType"));
-        userTypeCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        userTypeCol.setOnEditCommit(
-                t -> t.getTableView().getItems().get(
-                        t.getTablePosition().getRow()).setUserType(t.getNewValue())
-        );
-        loginCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("login"));
-        loginCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        loginCol.setOnEditCommit(
-                t -> {
-                    t.getTableView().getItems().get(
-                            t.getTablePosition().getRow()).setLogin(t.getNewValue());
-                    User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
-                            t.getTablePosition().getRow()).getId()));
-                    user.setLogin(t.getTableView().getItems().get(
-                            t.getTablePosition().getRow()).getLogin());
-                    userHibController.updateUser(user);
-                }
-        );
-        createDateCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("createDate"));
-        createDateCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        createDateCol.setOnEditCommit(
-                t -> t.getTableView().getItems().get(
-                        t.getTablePosition().getRow()).setCreateDate(t.getNewValue())
-        );
-        posCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("pos"));
-        posCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        posCol.setOnEditCommit(
-                t -> {
-                    t.getTableView().getItems().get(
-                            t.getTablePosition().getRow()).setPos(t.getNewValue());
-                    User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
-                            t.getTablePosition().getRow()).getId()));
-                    if (user.getClass() == Employee.class) {
-                        Employee employee = (Employee) user;
-                        employee.setPos(eEmpPositions.valueOf(t.getTableView().getItems().get(
-                                t.getTablePosition().getRow()).getPos()));
-                        userHibController.updateUser(employee);
-                    }
-                    else {
-                        AlertMessage.generateMessage("Not editable", "To edit the user should be of class Employee");
+            idCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("id"));
+            idCol.setCellFactory(TextFieldTableCell.forTableColumn());
+            idCol.setOnEditCommit(
+                    t -> t.getTableView().getItems().get(
+                            t.getTablePosition().getRow()).setId(t.getNewValue())
+            );
+            userTypeCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("userType"));
+            userTypeCol.setCellFactory(TextFieldTableCell.forTableColumn());
+            userTypeCol.setOnEditCommit(
+                    t -> t.getTableView().getItems().get(
+                            t.getTablePosition().getRow()).setUserType(t.getNewValue())
+            );
+            loginCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("login"));
+            loginCol.setCellFactory(TextFieldTableCell.forTableColumn());
+            loginCol.setOnEditCommit(
+                    t -> {
                         t.getTableView().getItems().get(
-                                t.getTablePosition().getRow()).setPos("");
+                                t.getTablePosition().getRow()).setLogin(t.getNewValue());
+                        User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
+                                t.getTablePosition().getRow()).getId()));
+                        user.setLogin(t.getTableView().getItems().get(
+                                t.getTablePosition().getRow()).getLogin());
+                        userHibController.updateUser(user);
                     }
-
-                }
-
-        );
-        emailCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("email"));
-        emailCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        emailCol.setOnEditCommit(
-                t -> {
-                    t.getTableView().getItems().get(
-                            t.getTablePosition().getRow()).setEmail(t.getNewValue());
-                    User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
-                            t.getTablePosition().getRow()).getId()));
-                    if (user.getClass() == Customer.class){
-                        Customer customer = (Customer) user;
-                        customer.setEmail(t.getTableView().getItems().get(
-                                t.getTablePosition().getRow()).getEmail());
-                        userHibController.updateUser(customer);
-                    }
-                    else {
-                        AlertMessage.generateMessage("Not editable", "To edit the user should be of class Customer");
+            );
+            createDateCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("createDate"));
+            createDateCol.setCellFactory(TextFieldTableCell.forTableColumn());
+            createDateCol.setOnEditCommit(
+                    t -> t.getTableView().getItems().get(
+                            t.getTablePosition().getRow()).setCreateDate(t.getNewValue())
+            );
+            posCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("pos"));
+            posCol.setCellFactory(TextFieldTableCell.forTableColumn());
+            posCol.setOnEditCommit(
+                    t -> {
                         t.getTableView().getItems().get(
-                                t.getTablePosition().getRow()).setEmail("");
+                                t.getTablePosition().getRow()).setPos(t.getNewValue());
+                        User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
+                                t.getTablePosition().getRow()).getId()));
+                        if (user.getClass() == Employee.class) {
+                            Employee employee = (Employee) user;
+                            employee.setPos(eEmpPositions.valueOf(t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow()).getPos()));
+                            userHibController.updateUser(employee);
+                        }
+                        else {
+                            AlertMessage.generateMessage("Not editable", "To edit the user should be of class Employee");
+                            t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow()).setPos("");
+                        }
+
                     }
 
-                }
-        );
-        phoneCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("phone"));
-        phoneCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        phoneCol.setOnEditCommit(
-                t -> {
-                    t.getTableView().getItems().get(
-                            t.getTablePosition().getRow()).setPhone(t.getNewValue());
-                    User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
-                            t.getTablePosition().getRow()).getId()));
-                    if (user.getClass() == Customer.class){
-                        Customer customer = (Customer) user;
-                        customer.setPhone(t.getTableView().getItems().get(
-                                t.getTablePosition().getRow()).getPhone());
-                        userHibController.updateUser(customer);
-                    }
-                    else {
-                        AlertMessage.generateMessage("Not editable", "To edit the user should be of class Customer");
+            );
+            emailCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("email"));
+            emailCol.setCellFactory(TextFieldTableCell.forTableColumn());
+            emailCol.setOnEditCommit(
+                    t -> {
                         t.getTableView().getItems().get(
-                                t.getTablePosition().getRow()).setPhone("");
-                    }
+                                t.getTablePosition().getRow()).setEmail(t.getNewValue());
+                        User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
+                                t.getTablePosition().getRow()).getId()));
+                        if (user.getClass() == Customer.class){
+                            Customer customer = (Customer) user;
+                            customer.setEmail(t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow()).getEmail());
+                            userHibController.updateUser(customer);
+                        }
+                        else {
+                            AlertMessage.generateMessage("Not editable", "To edit the user should be of class Customer");
+                            t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow()).setEmail("");
+                        }
 
-                }
-        );
-        nameCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("name"));
-        nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        nameCol.setOnEditCommit(
-                t -> {
-                    t.getTableView().getItems().get(
-                            t.getTablePosition().getRow()).setName(t.getNewValue());
-                    User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
-                            t.getTablePosition().getRow()).getId()));
-                    if (user.getClass() == Person.class){
-                        Person person = (Person) user;
-                        person.setName(t.getTableView().getItems().get(
-                                t.getTablePosition().getRow()).getName());
-                        userHibController.updateUser(person);
                     }
-                    else {
-                        AlertMessage.generateMessage("Not editable", "To edit the user should be of class Person");
+            );
+            phoneCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("phone"));
+            phoneCol.setCellFactory(TextFieldTableCell.forTableColumn());
+            phoneCol.setOnEditCommit(
+                    t -> {
                         t.getTableView().getItems().get(
-                                t.getTablePosition().getRow()).setName("");
-                    }
+                                t.getTablePosition().getRow()).setPhone(t.getNewValue());
+                        User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
+                                t.getTablePosition().getRow()).getId()));
+                        if (user.getClass() == Customer.class){
+                            Customer customer = (Customer) user;
+                            customer.setPhone(t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow()).getPhone());
+                            userHibController.updateUser(customer);
+                        }
+                        else {
+                            AlertMessage.generateMessage("Not editable", "To edit the user should be of class Customer");
+                            t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow()).setPhone("");
+                        }
 
-                }
-        );
-        surnameCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("surname"));
-        surnameCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        surnameCol.setOnEditCommit(
-                t -> {
-                    t.getTableView().getItems().get(
-                            t.getTablePosition().getRow()).setSurname(t.getNewValue());
-                    User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
-                            t.getTablePosition().getRow()).getId()));
-                    if (user.getClass() == Person.class){
-                        Person person = (Person) user;
-                        person.setSurname(t.getTableView().getItems().get(
-                                t.getTablePosition().getRow()).getSurname());
-                        userHibController.updateUser(person);
                     }
-                    else {
-                        AlertMessage.generateMessage("Not editable", "To edit the user should be of class Person");
+            );
+            nameCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("name"));
+            nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+            nameCol.setOnEditCommit(
+                    t -> {
                         t.getTableView().getItems().get(
-                                t.getTablePosition().getRow()).setSurname("");
+                                t.getTablePosition().getRow()).setName(t.getNewValue());
+                        User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
+                                t.getTablePosition().getRow()).getId()));
+                        if (user.getClass() == Person.class){
+                            Person person = (Person) user;
+                            person.setName(t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow()).getName());
+                            userHibController.updateUser(person);
+                        }
+                        else {
+                            AlertMessage.generateMessage("Not editable", "To edit the user should be of class Person");
+                            t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow()).setName("");
+                        }
+
                     }
-                }
-        );
-        companyNameCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("companyName"));
-        companyNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        companyNameCol.setOnEditCommit(
-                t -> {
-                    t.getTableView().getItems().get(
-                            t.getTablePosition().getRow()).setCompanyName(t.getNewValue());
-                    User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
-                            t.getTablePosition().getRow()).getId()));
-                    if (user.getClass() == LegalEntity.class){
-                        LegalEntity legalEntity = (LegalEntity) user;
-                        legalEntity.setCompanyName(t.getTableView().getItems().get(
-                                t.getTablePosition().getRow()).getCompanyName());
-                        userHibController.updateUser(legalEntity);
-                    }
-                    else {
-                        AlertMessage.generateMessage("Not editable", "To edit the user should be of class LegalEntity");
+            );
+            surnameCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("surname"));
+            surnameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+            surnameCol.setOnEditCommit(
+                    t -> {
                         t.getTableView().getItems().get(
-                                t.getTablePosition().getRow()).setCompanyName("");
-                    }
-                }
-        );
-
-        Callback<TableColumn<UsersTableParams, Void>, TableCell<UsersTableParams, Void>> cellFactory
-                = new Callback<TableColumn<UsersTableParams, Void>, TableCell<UsersTableParams, Void>>() {
-            @Override
-            public TableCell<UsersTableParams, Void> call(final TableColumn<UsersTableParams, Void> param) {
-                final TableCell<UsersTableParams, Void> cell = new TableCell<UsersTableParams, Void>() {
-
-                    private final Button button = new Button("Delete");
-
-                    {
-                        button.setOnAction((ActionEvent event) -> {
-                            UsersTableParams data = getTableView().getItems().get(getIndex());
-                            userHibController.removeUser(Integer.parseInt(data.getId()));
-                            try {
-                                refreshTable();
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(button);
+                                t.getTablePosition().getRow()).setSurname(t.getNewValue());
+                        User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
+                                t.getTablePosition().getRow()).getId()));
+                        if (user.getClass() == Person.class){
+                            Person person = (Person) user;
+                            person.setSurname(t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow()).getSurname());
+                            userHibController.updateUser(person);
+                        }
+                        else {
+                            AlertMessage.generateMessage("Not editable", "To edit the user should be of class Person");
+                            t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow()).setSurname("");
                         }
                     }
-                };
-                return cell;
+            );
+            companyNameCol.setCellValueFactory(new PropertyValueFactory<UsersTableParams, String>("companyName"));
+            companyNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+            companyNameCol.setOnEditCommit(
+                    t -> {
+                        t.getTableView().getItems().get(
+                                t.getTablePosition().getRow()).setCompanyName(t.getNewValue());
+                        User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
+                                t.getTablePosition().getRow()).getId()));
+                        if (user.getClass() == LegalEntity.class){
+                            LegalEntity legalEntity = (LegalEntity) user;
+                            legalEntity.setCompanyName(t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow()).getCompanyName());
+                            userHibController.updateUser(legalEntity);
+                        }
+                        else {
+                            AlertMessage.generateMessage("Not editable", "To edit the user should be of class LegalEntity");
+                            t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow()).setCompanyName("");
+                        }
+                    }
+            );
+
+            Callback<TableColumn<UsersTableParams, Void>, TableCell<UsersTableParams, Void>> cellFactory
+                    = new Callback<TableColumn<UsersTableParams, Void>, TableCell<UsersTableParams, Void>>() {
+                @Override
+                public TableCell<UsersTableParams, Void> call(final TableColumn<UsersTableParams, Void> param) {
+                    final TableCell<UsersTableParams, Void> cell = new TableCell<UsersTableParams, Void>() {
+
+                        private final Button button = new Button("Delete");
+
+                        {
+                            button.setOnAction((ActionEvent event) -> {
+                                UsersTableParams data = getTableView().getItems().get(getIndex());
+                                userHibController.removeUser(Integer.parseInt(data.getId()));
+                                try {
+                                    refreshTable();
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void updateItem(Void item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                setGraphic(null);
+                            } else {
+                                setGraphic(button);
+                            }
+                        }
+                    };
+                    return cell;
+                }
+            };
+
+            actionColBtn.setCellFactory(cellFactory);
+
+            try {
+                refreshTable();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        };
-
-        actionColBtn.setCellFactory(cellFactory);
-
-        try {
-            refreshTable();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
 
-        class XCell extends ListCell<String> {
-            HBox hbox = new HBox();
-            Label label = new Label("(empty)");
-            Pane pane = new Pane();
-            Button button = new Button("(add to cart)");
-            String lastItem;
 
-            public XCell() {
-                super();
-                hbox.getChildren().addAll(label, pane, button);
-                HBox.setHgrow(pane, Priority.ALWAYS);
-                button.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        System.out.println(bookHibController.getBookById(Integer.parseInt(lastItem.split(":")[0])));
+        //Book List actions
+        {
+            class XCell extends ListCell<String> {
+                HBox hbox = new HBox();
+                Label label = new Label("(empty)");
+                Pane pane = new Pane();
+                Button button = new Button("(add to cart)");
+                String lastItem;
+
+                public XCell() {
+                    super();
+                    hbox.getChildren().addAll(label, pane, button);
+                    HBox.setHgrow(pane, Priority.ALWAYS);
+                    button.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            System.out.println(bookHibController.getBookById(Integer.parseInt(lastItem.split(":")[0])));
+                        }
+                    });
+                }
+
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(null);
+                    if (empty) {
+                        lastItem = null;
+                        setGraphic(null);
+                    } else {
+                        lastItem = item;
+                        label.setText(item!=null ? item : "<null>");
+                        setGraphic(hbox);
                     }
-                });
-            }
-
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(null);
-                if (empty) {
-                    lastItem = null;
-                    setGraphic(null);
-                } else {
-                    lastItem = item;
-                    label.setText(item!=null ? item : "<null>");
-                    setGraphic(hbox);
                 }
             }
+
+            bookList.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+                @Override
+                public ListCell<String> call(ListView<String> param) {
+                    return new XCell();
+                }
+            });
         }
 
-        bookList.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-            @Override
-            public ListCell<String> call(ListView<String> param) {
-                return new XCell();
-            }
-        });
     }
 
     private void modifyAccess() {
