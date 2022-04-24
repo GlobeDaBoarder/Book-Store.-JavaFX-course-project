@@ -6,6 +6,7 @@ import hibernateControllers.UserHibController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,6 +15,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -293,6 +297,47 @@ public class MainWindow implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        class XCell extends ListCell<String> {
+            HBox hbox = new HBox();
+            Label label = new Label("(empty)");
+            Pane pane = new Pane();
+            Button button = new Button("(add to cart)");
+            String lastItem;
+
+            public XCell() {
+                super();
+                hbox.getChildren().addAll(label, pane, button);
+                HBox.setHgrow(pane, Priority.ALWAYS);
+                button.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        System.out.println(bookHibController.getBookById(Integer.parseInt(lastItem.split(":")[0])));
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(null);
+                if (empty) {
+                    lastItem = null;
+                    setGraphic(null);
+                } else {
+                    lastItem = item;
+                    label.setText(item!=null ? item : "<null>");
+                    setGraphic(hbox);
+                }
+            }
+        }
+
+        bookList.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+            @Override
+            public ListCell<String> call(ListView<String> param) {
+                return new XCell();
+            }
+        });
     }
 
     private void modifyAccess() {
