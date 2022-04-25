@@ -18,9 +18,27 @@ public class ShopingCart {
     private LocalDate orderDate;
     @ManyToOne
     private User buyer;
-    @ManyToMany(mappedBy = "inOrders", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(mappedBy = "inCarts", cascade = CascadeType.ALL)
     @OrderBy("productID ASC")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Book> books;
+
+    public ShopingCart(User buyer, Book book) {
+        this.buyer = buyer;
+        this.books = new ArrayList<Book>();
+        this.books.add(book);
+    }
+
+    public ShopingCart() {
+    }
+
+    @Override
+    public String toString() {
+        return "ShopingCart{" +
+                "id=" + id +
+                ", orderDate=" + orderDate +
+                ", buyer=" + buyer +
+                '}';
+    }
 }
 

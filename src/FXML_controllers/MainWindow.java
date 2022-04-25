@@ -69,6 +69,8 @@ public class MainWindow implements Initializable {
     public TableColumn<UsersTableParams, String> surnameCol;
     public TableColumn<UsersTableParams, String> companyNameCol;
     public TableColumn<UsersTableParams, Void> actionColBtn;
+    public ListView orderDetailsList;
+    public ListView MyOrdersList;
 
     private ObservableList<UsersTableParams> data = FXCollections.observableArrayList();
 
@@ -318,7 +320,21 @@ public class MainWindow implements Initializable {
                     button.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent event) {
-                            System.out.println(bookHibController.getBookById(Integer.parseInt(lastItem.split(":")[0])));
+                            User user = userHibController.getUserById(userId);
+                            int book_id = Integer.parseInt(lastItem.split(":")[0]);
+                            Book book = bookHibController.getBookById(book_id);
+
+                            /*ShopingCart shopingCart = new ShopingCart(user, book);
+                            user.getMyOwnOrders().add(shopingCart);
+                            book.getInCarts().add(shopingCart);
+                            bookHibController.editBook(book);
+                            userHibController.updateUser(user);*/
+
+                            ShopingCart shopingCart = new ShopingCart(user, book);
+                            book.getInCarts().add(shopingCart);
+                            user.getMyOwnOrders().add(shopingCart);
+                            bookHibController.createCart(shopingCart);
+
                         }
                     });
                 }
@@ -514,4 +530,6 @@ public class MainWindow implements Initializable {
         refreshBookLists(books);
     }
 
+    public void ConfirmOrderBtn(ActionEvent actionEvent) {
+    }
 }

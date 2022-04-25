@@ -8,6 +8,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,7 +35,7 @@ public class Book {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments;
     @ManyToMany
-    private List<ShopingCart> inOrders;
+    private List<ShopingCart> inCarts;
 
     public Book(double price, String name, String author, String description, LocalDate releaseDate, int pageCount,
                 eBookLang lang, int quantityAvalible, eBookGenre genre) {
@@ -65,5 +66,22 @@ public class Book {
 
     public Book() {
 
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "productID=" + productID +
+                ", price=" + price +
+                ", name='" + name + '\'' +
+                ", author='" + author + '\'' +
+                ", description='" + description + '\'' +
+                ", releaseDate=" + releaseDate +
+                ", pageCount=" + pageCount +
+                ", lang=" + lang +
+                ", quantityAvalible=" + quantityAvalible +
+                ", genre=" + genre +
+                ", isAvailable=" + isAvailable +
+                '}';
     }
 }

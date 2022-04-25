@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXML_controllers.MainWindow">
     <tabs>
@@ -51,7 +52,14 @@
         </Tab>
         <Tab fx:id="ShoppingCartTab" text="Shopping Cart">
             <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <ListView fx:id="orderDetailsList" layoutX="14.0" layoutY="32.0" prefHeight="328.0" prefWidth="278.0" />
+                  <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order details " />
+                  <ListView fx:id="MyOrdersList" layoutX="300.0" layoutY="32.0" prefHeight="201.0" prefWidth="291.0" />
+                  <Text layoutX="300.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My orders (carts) " />
+                  <Button layoutX="410.0" layoutY="285.0" mnemonicParsing="false" onAction="#ConfirmOrderBtn" text="Confirm order" />
+               </children></AnchorPane>
             </content>
         </Tab>
         <Tab fx:id="ManageBooksTab" text="Manage books">
