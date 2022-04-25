@@ -2,6 +2,7 @@ package FXML_controllers;
 
 import book_store.*;
 import hibernateControllers.BookHibController;
+import hibernateControllers.CartHibController;
 import hibernateControllers.UserHibController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -79,6 +80,7 @@ public class MainWindow implements Initializable {
     private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("GlobeBookShop");
     BookHibController bookHibController = new BookHibController(entityManagerFactory);
     UserHibController userHibController = new UserHibController(entityManagerFactory);
+    CartHibController cartHibController = new CartHibController(entityManagerFactory);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -333,7 +335,7 @@ public class MainWindow implements Initializable {
                             ShopingCart shopingCart = new ShopingCart(user, book);
                             book.getInCarts().add(shopingCart);
                             user.getMyOwnOrders().add(shopingCart);
-                            bookHibController.createCart(shopingCart);
+                            cartHibController.createCart(shopingCart);
 
                         }
                     });
