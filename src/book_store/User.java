@@ -19,7 +19,7 @@ abstract public class User {
     private String password;
     private LocalDate createDate;
 
-    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "buyer", cascade = {CascadeType.ALL})
     @OrderBy("id ASC")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<ShopingCart> myOwnOrders;

@@ -20,7 +20,7 @@ public class ShopingCart {
     private eCartStatus cartStatus;
     @ManyToOne
     private User buyer;
-    @ManyToMany(mappedBy = "inCarts", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "inCarts", cascade = {CascadeType.ALL})
     @OrderBy("productID ASC")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Book> books;

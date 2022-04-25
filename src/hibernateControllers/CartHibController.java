@@ -16,6 +16,7 @@ public class CartHibController {
     private EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
+
     public void createCart(ShopingCart shopingCart){
         EntityManager em = null;
         try {
