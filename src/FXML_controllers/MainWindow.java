@@ -327,16 +327,34 @@ public class MainWindow implements Initializable {
                             Book book = bookHibController.getBookById(book_id);
 
                             /*ShopingCart shopingCart = new ShopingCart(user, book);
-                            user.getMyOwnOrders().add(shopingCart);
-                            book.getInCarts().add(shopingCart);
-                            bookHibController.editBook(book);
-                            userHibController.updateUser(user);*/
-
-                            ShopingCart shopingCart = new ShopingCart(user, book);
                             book.getInCarts().add(shopingCart);
                             user.getMyOwnOrders().add(shopingCart);
-                            cartHibController.createCart(shopingCart);
+                            cartHibController.createCart(shopingCart);*/
 
+                            if(user.getMyOwnOrders().size() == 0 || user.getLastCart().getCartStatus() == eCartStatus.VERIFIED){
+                                ShopingCart shopingCart = new ShopingCart(user, book);
+                                book.getInCarts().add(shopingCart);
+                                user.getMyOwnOrders().add(shopingCart);
+                                cartHibController.createCart(shopingCart);
+                            }else{
+                                ShopingCart shopingCart = user.getLastCart();
+                                shopingCart.addBookToCart(book);
+                                book.getInCarts().add(shopingCart);
+                                System.out.println(shopingCart);
+                                cartHibController.updateCart(shopingCart);
+                            }
+
+
+
+
+
+                            /*List<ShopingCart> l1 = book.getInCarts();
+                            List<ShopingCart> l2 = user.getMyOwnOrders();
+
+                            System.out.println("Book" + book.getProductID()+ " is in catrs: ");
+                            System.out.println(l1);
+                            System.out.println("user" + user.getId() + " has carts: ");
+                            System.out.println(l2);*/
                         }
                     });
                 }

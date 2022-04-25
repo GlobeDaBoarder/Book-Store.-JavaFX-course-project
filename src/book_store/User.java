@@ -33,6 +33,10 @@ abstract public class User {
     public User() {
     }
 
+    public ShopingCart getLastCart(){
+        return myOwnOrders.get(myOwnOrders.size() - 1);
+    }
+
     @Override
     public String toString() {
         return "User{" +

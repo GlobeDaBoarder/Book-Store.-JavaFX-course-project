@@ -16,6 +16,8 @@ public class ShopingCart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private LocalDate orderDate;
+    @Enumerated
+    private eCartStatus cartStatus;
     @ManyToOne
     private User buyer;
     @ManyToMany(mappedBy = "inCarts", cascade = CascadeType.ALL)
@@ -24,21 +26,18 @@ public class ShopingCart {
     private List<Book> books;
 
     public ShopingCart(User buyer, Book book) {
+        this.cartStatus = eCartStatus.ACTIVE;
         this.buyer = buyer;
-        this.books = new ArrayList<Book>();
+        this.books = new ArrayList<Book>(0);
         this.books.add(book);
     }
 
     public ShopingCart() {
     }
 
-    @Override
-    public String toString() {
-        return "ShopingCart{" +
-                "id=" + id +
-                ", orderDate=" + orderDate +
-                ", buyer=" + buyer +
-                '}';
+    public void addBookToCart(Book book){
+        this.books.add(book);
     }
+
 }
 
