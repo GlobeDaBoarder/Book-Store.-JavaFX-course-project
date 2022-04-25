@@ -20,6 +20,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -74,6 +75,11 @@ public class MainWindow implements Initializable {
 
     public ListView orderDetailsList;
     public ListView MyOrdersList;
+    public ListView orderDetailsMngr;
+    public ListView submittedOrdersMngr;
+    public Button submitOrderBtn;
+    public Text orderIsSubmittedText;
+    public Tab ManageOrderTab;
 
     private ObservableList<UsersTableParams> data = FXCollections.observableArrayList();
 
@@ -343,7 +349,6 @@ public class MainWindow implements Initializable {
                                 ShopingCart shopingCart = user.getLastCart();
                                 shopingCart.addBookToCart(book);
                                 book.getInCarts().add(shopingCart);
-                                System.out.println(shopingCart);
                                 cartHibController.updateCart(shopingCart);
                             }
 
@@ -392,9 +397,11 @@ public class MainWindow implements Initializable {
         if (user.getClass() != Employee.class) {
             ManageBooksTab.setDisable(true);
             ManageUsersTab.setDisable(true);
+            ManageOrderTab.setDisable(true);
         } else {
             ManageBooksTab.setDisable(false);
             ManageUsersTab.setDisable(false);
+            ManageOrderTab.setDisable(false);
         }
     }
 
@@ -479,6 +486,22 @@ public class MainWindow implements Initializable {
         MyOrdersList.getItems().clear();
         List<ShopingCart> carts = user.getMyOwnOrders();
         carts.forEach(shopingCart -> MyOrdersList.getItems().add(shopingCart.getId() + ": crated on "
+                + shopingCart.getCartCreateDate() + " with " + shopingCart.getBooks().size() + " items"));
+
+        if(user.getLastCart().getCartStatus() != eCartStatus.ACTIVE){
+            submitOrderBtn.setDisable(true);
+            orderIsSubmittedText.setVisible(true);
+
+        }else{
+            submitOrderBtn.setDisable(false);
+            orderIsSubmittedText.setVisible(false);
+        }
+    }
+
+    private void refreshSubmittedOrdersList(){
+        submittedOrdersMngr.getItems().clear();
+        List<ShopingCart> orders = cartHibController.getAllVerifiedCarts();
+        orders.forEach(shopingCart -> submittedOrdersMngr.getItems().add(shopingCart.getId() + ": crated on "
                 + shopingCart.getCartCreateDate() + " with " + shopingCart.getBooks().size() + " items"));
     }
 
@@ -565,9 +588,6 @@ public class MainWindow implements Initializable {
         refreshBookLists(books);
     }
 
-    public void ConfirmOrderBtn(ActionEvent actionEvent) {
-    }
-
     public void changedToCartTab(Event event) {
         refreshOrdersList();
     }
@@ -576,5 +596,17 @@ public class MainWindow implements Initializable {
     }
 
     public void deleteOrder(ActionEvent actionEvent) {
+    }
+
+    public void changedToManageOrdersTab(Event event) {
+        refreshSubmittedOrdersList();
+    }
+
+    public void submitOrder(ActionEvent actionEvent) {
+        User user = userHibController.getUserById(userId);
+        user.getLastCart().setCartStatus(eCartStatus.SUBMITTED);
+        ShopingCart shopingCart = user.getLastCart();
+        cartHibController.updateCart(shopingCart);
+        refreshOrdersList();
     }
 }

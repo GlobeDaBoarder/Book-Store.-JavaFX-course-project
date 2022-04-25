@@ -58,7 +58,8 @@
                   <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order details " />
                   <ListView fx:id="MyOrdersList" layoutX="300.0" layoutY="32.0" prefHeight="201.0" prefWidth="291.0" />
                   <Text layoutX="300.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My orders (carts) " />
-                  <Button layoutX="410.0" layoutY="285.0" mnemonicParsing="false" onAction="#ConfirmOrderBtn" text="submit my order" />
+                  <Button fx:id="submitOrderBtn" layoutX="410.0" layoutY="285.0" mnemonicParsing="false" onAction="#submitOrder" text="submit my order" />
+                  <Text fx:id="orderIsSubmittedText" layoutX="411.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order is submitted!" />
                </children></AnchorPane>
             </content>
         </Tab>
@@ -114,7 +115,7 @@
                 </AnchorPane>
             </content>
         </Tab>
-      <Tab text="Manage orders">
+      <Tab fx:id="ManageOrderTab" onSelectionChanged="#changedToManageOrdersTab" text="Manage orders">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
