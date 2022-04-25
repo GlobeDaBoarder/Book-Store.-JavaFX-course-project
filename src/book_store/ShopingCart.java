@@ -15,7 +15,7 @@ public class ShopingCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private LocalDate orderDate;
+    private LocalDate cartCreateDate;
     @Enumerated
     private eCartStatus cartStatus;
     @ManyToOne
@@ -26,6 +26,7 @@ public class ShopingCart {
     private List<Book> books;
 
     public ShopingCart(User buyer, Book book) {
+        this.cartCreateDate = LocalDate.now();
         this.cartStatus = eCartStatus.ACTIVE;
         this.buyer = buyer;
         this.books = new ArrayList<Book>(0);

@@ -7,6 +7,7 @@ import hibernateControllers.UserHibController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -70,6 +71,7 @@ public class MainWindow implements Initializable {
     public TableColumn<UsersTableParams, String> surnameCol;
     public TableColumn<UsersTableParams, String> companyNameCol;
     public TableColumn<UsersTableParams, Void> actionColBtn;
+
     public ListView orderDetailsList;
     public ListView MyOrdersList;
 
@@ -93,6 +95,7 @@ public class MainWindow implements Initializable {
 
         bookGenre.getItems().addAll(eBookGenre.values());
         bookLang.getItems().addAll(eBookLang.values());
+
         refreshBookLists(bookHibController.getAllBooks(false));
 
         //User table actions
@@ -331,7 +334,7 @@ public class MainWindow implements Initializable {
                             user.getMyOwnOrders().add(shopingCart);
                             cartHibController.createCart(shopingCart);*/
 
-                            if(user.getMyOwnOrders().size() == 0 || user.getLastCart().getCartStatus() == eCartStatus.VERIFIED){
+                            if(user.getMyOwnOrders().size() == 0 || user.getLastCart().getCartStatus() != eCartStatus.ACTIVE){
                                 ShopingCart shopingCart = new ShopingCart(user, book);
                                 book.getInCarts().add(shopingCart);
                                 user.getMyOwnOrders().add(shopingCart);
@@ -467,6 +470,18 @@ public class MainWindow implements Initializable {
         usersTable.setItems(data);
     }
 
+    private void refreshOrdersList(){
+        orderDetailsList.getItems().clear();
+        User user = userHibController.getUserById(userId);
+        List<Book> orderedBooks = user.getLastCart().getBooks();
+        orderedBooks.forEach(b -> orderDetailsList.getItems().add(b.getProductID() + ": " + b.getName() + " by " + b.getAuthor()));
+
+        MyOrdersList.getItems().clear();
+        List<ShopingCart> carts = user.getMyOwnOrders();
+        carts.forEach(shopingCart -> MyOrdersList.getItems().add(shopingCart.getId() + ": crated on "
+                + shopingCart.getCartCreateDate() + " with " + shopingCart.getBooks().size() + " items"));
+    }
+
     public void setUserId(int userId) {
         this.userId = userId;
         modifyAccess();
@@ -551,5 +566,15 @@ public class MainWindow implements Initializable {
     }
 
     public void ConfirmOrderBtn(ActionEvent actionEvent) {
+    }
+
+    public void changedToCartTab(Event event) {
+        refreshOrdersList();
+    }
+
+    public void verifyOrder(ActionEvent actionEvent) {
+    }
+
+    public void deleteOrder(ActionEvent actionEvent) {
     }
 }
