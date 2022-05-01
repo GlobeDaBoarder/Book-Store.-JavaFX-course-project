@@ -93,4 +93,53 @@ public class CartHibController {
         }
         return null;
     }
+
+    public ShopingCart getCartById(int id){
+        EntityManager em = null;
+        ShopingCart shopingCart = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            shopingCart = em.find(ShopingCart.class, id);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println("No user with such ID");
+        }
+        return shopingCart;
+    }
+
+    public void removeCart(int id) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            ShopingCart shopingCart = null;
+            try {
+                shopingCart = em.getReference(ShopingCart.class, id);
+            } catch (Exception e) {
+                System.out.println("No cart with such ID");
+            }
+
+            for(Book b:shopingCart.getBooks()){
+                b.getInCarts().remove(shopingCart);
+                em.merge(b);
+            }
+
+            User user = shopingCart.getBuyer();
+            user.getMyOwnOrders().remove(shopingCart);
+            em.merge(user);
+
+            shopingCart.getBooks().clear();
+            em.merge(shopingCart);
+
+            em.remove(shopingCart);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 }

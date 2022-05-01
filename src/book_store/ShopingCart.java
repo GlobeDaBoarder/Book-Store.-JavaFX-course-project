@@ -40,5 +40,13 @@ public class ShopingCart {
         this.books.add(book);
     }
 
+    public  void removeBookFromCart(Book book){
+        this.books.forEach(b -> {
+            if (b.getProductID() == book.getProductID()){
+                this.books.remove(b);
+                return;
+            }
+        });
+    }
 }
 

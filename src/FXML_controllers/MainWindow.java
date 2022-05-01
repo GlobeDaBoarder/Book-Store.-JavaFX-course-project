@@ -152,8 +152,7 @@ public class MainWindow implements Initializable {
                             employee.setPos(eEmpPositions.valueOf(t.getTableView().getItems().get(
                                     t.getTablePosition().getRow()).getPos()));
                             userHibController.updateUser(employee);
-                        }
-                        else {
+                        } else {
                             AlertMessage.generateMessage("Not editable", "To edit the user should be of class Employee");
                             t.getTableView().getItems().get(
                                     t.getTablePosition().getRow()).setPos("");
@@ -170,13 +169,12 @@ public class MainWindow implements Initializable {
                                 t.getTablePosition().getRow()).setEmail(t.getNewValue());
                         User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
                                 t.getTablePosition().getRow()).getId()));
-                        if (user.getClass() == Customer.class){
+                        if (user.getClass() == Customer.class) {
                             Customer customer = (Customer) user;
                             customer.setEmail(t.getTableView().getItems().get(
                                     t.getTablePosition().getRow()).getEmail());
                             userHibController.updateUser(customer);
-                        }
-                        else {
+                        } else {
                             AlertMessage.generateMessage("Not editable", "To edit the user should be of class Customer");
                             t.getTableView().getItems().get(
                                     t.getTablePosition().getRow()).setEmail("");
@@ -192,13 +190,12 @@ public class MainWindow implements Initializable {
                                 t.getTablePosition().getRow()).setPhone(t.getNewValue());
                         User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
                                 t.getTablePosition().getRow()).getId()));
-                        if (user.getClass() == Customer.class){
+                        if (user.getClass() == Customer.class) {
                             Customer customer = (Customer) user;
                             customer.setPhone(t.getTableView().getItems().get(
                                     t.getTablePosition().getRow()).getPhone());
                             userHibController.updateUser(customer);
-                        }
-                        else {
+                        } else {
                             AlertMessage.generateMessage("Not editable", "To edit the user should be of class Customer");
                             t.getTableView().getItems().get(
                                     t.getTablePosition().getRow()).setPhone("");
@@ -214,13 +211,12 @@ public class MainWindow implements Initializable {
                                 t.getTablePosition().getRow()).setName(t.getNewValue());
                         User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
                                 t.getTablePosition().getRow()).getId()));
-                        if (user.getClass() == Person.class){
+                        if (user.getClass() == Person.class) {
                             Person person = (Person) user;
                             person.setName(t.getTableView().getItems().get(
                                     t.getTablePosition().getRow()).getName());
                             userHibController.updateUser(person);
-                        }
-                        else {
+                        } else {
                             AlertMessage.generateMessage("Not editable", "To edit the user should be of class Person");
                             t.getTableView().getItems().get(
                                     t.getTablePosition().getRow()).setName("");
@@ -236,13 +232,12 @@ public class MainWindow implements Initializable {
                                 t.getTablePosition().getRow()).setSurname(t.getNewValue());
                         User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
                                 t.getTablePosition().getRow()).getId()));
-                        if (user.getClass() == Person.class){
+                        if (user.getClass() == Person.class) {
                             Person person = (Person) user;
                             person.setSurname(t.getTableView().getItems().get(
                                     t.getTablePosition().getRow()).getSurname());
                             userHibController.updateUser(person);
-                        }
-                        else {
+                        } else {
                             AlertMessage.generateMessage("Not editable", "To edit the user should be of class Person");
                             t.getTableView().getItems().get(
                                     t.getTablePosition().getRow()).setSurname("");
@@ -257,13 +252,12 @@ public class MainWindow implements Initializable {
                                 t.getTablePosition().getRow()).setCompanyName(t.getNewValue());
                         User user = userHibController.getUserById(Integer.parseInt(t.getTableView().getItems().get(
                                 t.getTablePosition().getRow()).getId()));
-                        if (user.getClass() == LegalEntity.class){
+                        if (user.getClass() == LegalEntity.class) {
                             LegalEntity legalEntity = (LegalEntity) user;
                             legalEntity.setCompanyName(t.getTableView().getItems().get(
                                     t.getTablePosition().getRow()).getCompanyName());
                             userHibController.updateUser(legalEntity);
-                        }
-                        else {
+                        } else {
                             AlertMessage.generateMessage("Not editable", "To edit the user should be of class LegalEntity");
                             t.getTableView().getItems().get(
                                     t.getTablePosition().getRow()).setCompanyName("");
@@ -340,12 +334,12 @@ public class MainWindow implements Initializable {
                             user.getMyOwnOrders().add(shopingCart);
                             cartHibController.createCart(shopingCart);*/
 
-                            if(user.getMyOwnOrders().size() == 0 || user.getLastCart().getCartStatus() != eCartStatus.ACTIVE){
+                            if (user.getMyOwnOrders().size() == 0 || user.getLastCart().getCartStatus() != eCartStatus.ACTIVE) {
                                 ShopingCart shopingCart = new ShopingCart(user, book);
                                 book.getInCarts().add(shopingCart);
                                 user.getMyOwnOrders().add(shopingCart);
                                 cartHibController.createCart(shopingCart);
-                            }else{
+                            } else {
                                 ShopingCart shopingCart = user.getLastCart();
                                 shopingCart.addBookToCart(book);
                                 book.getInCarts().add(shopingCart);
@@ -376,7 +370,7 @@ public class MainWindow implements Initializable {
                         setGraphic(null);
                     } else {
                         lastItem = item;
-                        label.setText(item!=null ? item : "<null>");
+                        label.setText(item != null ? item : "<null>");
                         setGraphic(hbox);
                     }
                 }
@@ -460,7 +454,7 @@ public class MainWindow implements Initializable {
         }
 
         List<LegalEntity> legalEntities = userHibController.getAllLegalEntities();
-        for (LegalEntity legalEntity  : legalEntities) {
+        for (LegalEntity legalEntity : legalEntities) {
             UsersTableParams empTableParams = new UsersTableParams();
             empTableParams.setId(String.valueOf(legalEntity.getId()));
             empTableParams.setUserType(legalEntity.getClass().getSimpleName());
@@ -477,7 +471,7 @@ public class MainWindow implements Initializable {
         usersTable.setItems(data);
     }
 
-    private void refreshOrdersList(){
+    private void refreshOrdersList() {
         orderDetailsList.getItems().clear();
         User user = userHibController.getUserById(userId);
         List<Book> orderedBooks = user.getLastCart().getBooks();
@@ -486,19 +480,84 @@ public class MainWindow implements Initializable {
         MyOrdersList.getItems().clear();
         List<ShopingCart> carts = user.getMyOwnOrders();
         carts.forEach(shopingCart -> MyOrdersList.getItems().add(shopingCart.getId() + ": crated on "
-                + shopingCart.getCartCreateDate() + " with " + shopingCart.getBooks().size() + " items"));
+                + shopingCart.getCartCreateDate() + " with " + shopingCart.getBooks().size() + " items. Status : " + shopingCart.getCartStatus()));
 
-        if(user.getLastCart().getCartStatus() != eCartStatus.ACTIVE){
+        if (user.getLastCart().getCartStatus() != eCartStatus.ACTIVE) {
             submitOrderBtn.setDisable(true);
             orderIsSubmittedText.setVisible(true);
 
-        }else{
+        } else {
             submitOrderBtn.setDisable(false);
             orderIsSubmittedText.setVisible(false);
+
+            class XCell extends ListCell<String> {
+                HBox hbox = new HBox();
+                Label label = new Label("(empty)");
+                Pane pane = new Pane();
+                Button button = new Button("(delete)");
+                String lastItem;
+
+                public XCell() {
+                    super();
+                    hbox.getChildren().addAll(label, pane, button);
+                    HBox.setHgrow(pane, Priority.ALWAYS);
+                    button.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            int book_id = Integer.parseInt(lastItem.split(":")[0]);
+                            // Book book = bookHibController.getBookById(book_id);
+                            // System.out.println(book);
+                            ShopingCart shopingCart = user.getLastCart();
+                            System.out.println(shopingCart);
+                            shopingCart.getBooks().removeIf(b -> b.getProductID() == book_id);
+                            Book book = shopingCart.getBooks().stream().filter(b -> b.getProductID() == book_id).findFirst().orElse(null);
+                            book.getInCarts().remove(shopingCart);
+                            // shopingCart.removeBookFromCart(book);
+                            // System.out.println(shopingCart);
+                            // System.out.println(book.getInCarts());
+/*                            for (ShopingCart inCart : book.getInCarts()) {
+                                if(inCart.getId() == shopingCart.getId()){
+                                    book.getInCarts().remove(inCart);
+                                    break;
+                                }
+                            }*/
+
+                            //book.getInCarts().remove(shopingCart);
+                            //System.out.println(book.getInCarts());
+                            cartHibController.updateCart(shopingCart);
+                            //bookHibController.editBook(book);
+                            //userHibController.updateUser(user);
+
+                            refreshOrdersList();
+                        }
+                    });
+                }
+
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(null);
+                    if (empty) {
+                        lastItem = null;
+                        setGraphic(null);
+                    } else {
+                        lastItem = item;
+                        label.setText(item != null ? item : "<null>");
+                        setGraphic(hbox);
+                    }
+                }
+            }
+
+            orderDetailsList.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+                @Override
+                public ListCell<String> call(ListView<String> param) {
+                    return new XCell();
+                }
+            });
         }
     }
 
-    private void refreshSubmittedOrdersList(){
+    private void refreshSubmittedOrdersList() {
         submittedOrdersMngr.getItems().clear();
         List<ShopingCart> orders = cartHibController.getAllVerifiedCarts();
         orders.forEach(shopingCart -> submittedOrdersMngr.getItems().add(shopingCart.getId() + ": crated on "
@@ -593,9 +652,20 @@ public class MainWindow implements Initializable {
     }
 
     public void verifyOrder(ActionEvent actionEvent) {
+        User user = userHibController.getUserById(userId);
+        int cart_id = Integer.parseInt(submittedOrdersMngr.getSelectionModel().getSelectedItem().toString().split(":")[0]);
+        ShopingCart shopingCart = cartHibController.getCartById(cart_id);
+        shopingCart.setCartStatus(eCartStatus.VERIFIED);
+        cartHibController.updateCart(shopingCart);
+        refreshSubmittedOrdersList();
     }
 
     public void deleteOrder(ActionEvent actionEvent) {
+        User user = userHibController.getUserById(userId);
+        int cart_id = Integer.parseInt(submittedOrdersMngr.getSelectionModel().getSelectedItem().toString().split(":")[0]);
+        ShopingCart shopingCart = cartHibController.getCartById(cart_id);
+        cartHibController.removeCart(cart_id);
+        refreshSubmittedOrdersList();
     }
 
     public void changedToManageOrdersTab(Event event) {
