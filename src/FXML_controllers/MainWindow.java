@@ -1,6 +1,7 @@
 package FXML_controllers;
 
 import book_store.*;
+import com.google.protobuf.EmptyOrBuilder;
 import hibernateControllers.BookHibController;
 import hibernateControllers.CartHibController;
 import hibernateControllers.UserHibController;
@@ -393,9 +394,17 @@ public class MainWindow implements Initializable {
             ManageUsersTab.setDisable(true);
             ManageOrderTab.setDisable(true);
         } else {
-            ManageBooksTab.setDisable(false);
-            ManageUsersTab.setDisable(false);
-            ManageOrderTab.setDisable(false);
+            Employee employee = (Employee) user;
+            if (employee.getPos() == eEmpPositions.ADMIN){
+                ManageBooksTab.setDisable(false);
+                ManageUsersTab.setDisable(false);
+                ManageOrderTab.setDisable(false);
+            }else{
+                ManageBooksTab.setDisable(false);
+                ManageUsersTab.setDisable(true);
+                ManageOrderTab.setDisable(false);
+            }
+
         }
     }
 
