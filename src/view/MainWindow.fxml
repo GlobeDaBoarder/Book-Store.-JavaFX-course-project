@@ -120,7 +120,7 @@
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
                   <ListView fx:id="orderDetailsMngr" layoutX="14.0" layoutY="34.0" prefHeight="322.0" prefWidth="254.0" />
-                  <ListView fx:id="submittedOrdersMngr" layoutX="281.0" layoutY="34.0" prefHeight="250.0" prefWidth="306.0" />
+                  <ListView fx:id="submittedOrdersMngr" layoutX="281.0" layoutY="34.0" onMouseClicked="#showSelectedOrderDetails" prefHeight="250.0" prefWidth="306.0" />
                   <Text layoutX="281.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="submited orders" />
                   <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="order details" />
                   <Button layoutX="343.0" layoutY="312.0" mnemonicParsing="false" onAction="#verifyOrder" text="Verify order" />

@@ -18,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -666,6 +667,7 @@ public class MainWindow implements Initializable {
             shopingCart.setCartStatus(eCartStatus.VERIFIED);
             cartHibController.updateCart(shopingCart);
             refreshSubmittedOrdersList();
+            orderDetailsMngr.getItems().clear();
         }
     }
 
@@ -676,6 +678,7 @@ public class MainWindow implements Initializable {
             ShopingCart shopingCart = cartHibController.getCartById(cart_id);
             cartHibController.removeCart(cart_id);
             refreshSubmittedOrdersList();
+            orderDetailsMngr.getItems().clear();
         }
     }
 
@@ -695,5 +698,15 @@ public class MainWindow implements Initializable {
         }
 
 
+    }
+
+    public void showSelectedOrderDetails(MouseEvent mouseEvent) {
+        User user = userHibController.getUserById(userId);
+        orderDetailsMngr.getItems().clear();
+        int cart_id = Integer.parseInt(submittedOrdersMngr.getSelectionModel().getSelectedItem().toString().split(":")[0]);
+        ShopingCart shopingCart = cartHibController.getCartById(cart_id);
+        List<Book> orderedBooks = shopingCart.getBooks();
+
+        orderedBooks.forEach(b -> orderDetailsMngr.getItems().add(b.getProductID() + ": " + b.getName() + " by " + b.getAuthor()));
     }
 }
