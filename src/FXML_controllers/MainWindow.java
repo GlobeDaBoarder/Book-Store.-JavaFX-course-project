@@ -472,23 +472,19 @@ public class MainWindow implements Initializable {
     }
 
     private void refreshOrdersList() {
-        orderDetailsList.getItems().clear();
         User user = userHibController.getUserById(userId);
-        List<Book> orderedBooks = user.getLastCart().getBooks();
-        orderedBooks.forEach(b -> orderDetailsList.getItems().add(b.getProductID() + ": " + b.getName() + " by " + b.getAuthor()));
+        submitOrderBtn.setDisable(true);
+        orderIsSubmittedText.setVisible(false);
 
-        MyOrdersList.getItems().clear();
-        List<ShopingCart> carts = user.getMyOwnOrders();
-        carts.forEach(shopingCart -> MyOrdersList.getItems().add(shopingCart.getId() + ": crated on "
-                + shopingCart.getCartCreateDate() + " with " + shopingCart.getBooks().size() + " items. Status : " + shopingCart.getCartStatus()));
+        if(user.getMyOwnOrders().size() != 0){
+            orderDetailsList.getItems().clear();
+            List<Book> orderedBooks = user.getLastCart().getBooks();
+            orderedBooks.forEach(b -> orderDetailsList.getItems().add(b.getProductID() + ": " + b.getName() + " by " + b.getAuthor()));
 
-        if (user.getLastCart().getCartStatus() != eCartStatus.ACTIVE) {
-            submitOrderBtn.setDisable(true);
-            orderIsSubmittedText.setVisible(true);
-
-        } else {
-            submitOrderBtn.setDisable(false);
-            orderIsSubmittedText.setVisible(false);
+            MyOrdersList.getItems().clear();
+            List<ShopingCart> carts = user.getMyOwnOrders();
+            carts.forEach(shopingCart -> MyOrdersList.getItems().add(shopingCart.getId() + ": crated on "
+                    + shopingCart.getCartCreateDate() + " with " + shopingCart.getBooks().size() + " items. Status : " + shopingCart.getCartStatus()));
 
             class XCell extends ListCell<String> {
                 HBox hbox = new HBox();
@@ -499,7 +495,12 @@ public class MainWindow implements Initializable {
 
                 public XCell() {
                     super();
-                    hbox.getChildren().addAll(label, pane, button);
+                    if(user.getLastCart().getCartStatus() == eCartStatus.ACTIVE){
+                        hbox.getChildren().addAll(label, pane, button);
+                    }else{
+                        hbox.getChildren().addAll(label, pane);
+                    }
+
                     HBox.setHgrow(pane, Priority.ALWAYS);
                     button.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
@@ -540,7 +541,7 @@ public class MainWindow implements Initializable {
                     if (empty) {
                         lastItem = null;
                         setGraphic(null);
-                    } else {
+                    }else{
                         lastItem = item;
                         label.setText(item != null ? item : "<null>");
                         setGraphic(hbox);
@@ -548,13 +549,32 @@ public class MainWindow implements Initializable {
                 }
             }
 
-            orderDetailsList.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-                @Override
-                public ListCell<String> call(ListView<String> param) {
-                    return new XCell();
-                }
-            });
+            if (user.getLastCart().getCartStatus() != eCartStatus.ACTIVE) {
+                submitOrderBtn.setDisable(true);
+                orderIsSubmittedText.setVisible(true);
+
+                orderDetailsList.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+                    @Override
+                    public ListCell<String> call(ListView<String> param) {
+                        return new XCell();
+                    }
+                });
+
+            } else {
+                submitOrderBtn.setDisable(false);
+                orderIsSubmittedText.setVisible(false);
+
+
+
+                orderDetailsList.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+                    @Override
+                    public ListCell<String> call(ListView<String> param) {
+                        return new XCell();
+                    }
+                });
+            }
         }
+
     }
 
     private void refreshSubmittedOrdersList() {
@@ -678,5 +698,6 @@ public class MainWindow implements Initializable {
         ShopingCart shopingCart = user.getLastCart();
         cartHibController.updateCart(shopingCart);
         refreshOrdersList();
+
     }
 }
