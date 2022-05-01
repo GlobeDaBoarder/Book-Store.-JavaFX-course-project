@@ -332,16 +332,15 @@ public class MainWindow implements Initializable {
                             int book_id = Integer.parseInt(lastItem.split(":")[0]);
                             Book book = bookHibController.getBookById(book_id);
 
-                            /*ShopingCart shopingCart = new ShopingCart(user, book);
-                            book.getInCarts().add(shopingCart);
-                            user.getMyOwnOrders().add(shopingCart);
-                            cartHibController.createCart(shopingCart);*/
 
                             if (user.getMyOwnOrders().size() == 0 || user.getLastCart().getCartStatus() != eCartStatus.ACTIVE) {
                                 ShopingCart shopingCart = new ShopingCart(user, book);
+                                book.setQuantityAvalible(book.getQuantityAvalible() - 1);
+                                bookHibController.editBook(book);
                                 book.getInCarts().add(shopingCart);
                                 user.getMyOwnOrders().add(shopingCart);
                                 cartHibController.createCart(shopingCart);
+                                refreshBookLists();
                             } else {
                                 ShopingCart shopingCart = user.getLastCart();
                                 shopingCart.addBookToCart(book);
@@ -351,18 +350,6 @@ public class MainWindow implements Initializable {
                                 cartHibController.updateCart(shopingCart);
                                 refreshBookLists();
                             }
-
-
-
-
-
-                            /*List<ShopingCart> l1 = book.getInCarts();
-                            List<ShopingCart> l2 = user.getMyOwnOrders();
-
-                            System.out.println("Book" + book.getProductID()+ " is in catrs: ");
-                            System.out.println(l1);
-                            System.out.println("user" + user.getId() + " has carts: ");
-                            System.out.println(l2);*/
                         }
                     });
                 }
@@ -700,6 +687,11 @@ public class MainWindow implements Initializable {
             User user = userHibController.getUserById(userId);
             int cart_id = Integer.parseInt(submittedOrdersMngr.getSelectionModel().getSelectedItem().toString().split(":")[0]);
             ShopingCart shopingCart = cartHibController.getCartById(cart_id);
+            shopingCart.getBooks().forEach(book -> {
+                book.setQuantityAvalible(book.getQuantityAvalible() + 1);
+                bookHibController.editBook(book);
+            });
+            refreshBookLists();
             cartHibController.removeCart(cart_id);
             refreshSubmittedOrdersList();
             orderDetailsMngr.getItems().clear();
