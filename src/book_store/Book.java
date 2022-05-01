@@ -84,4 +84,12 @@ public class Book {
                 ", isAvailable=" + isAvailable +
                 '}';
     }
+
+    public void setQuantityAvalible(int quantityAvalible) {
+        this.quantityAvalible = quantityAvalible;
+        if (this.quantityAvalible < 1)
+            this.isAvailable = false;
+        else
+            this.isAvailable = true;
+    }
 }

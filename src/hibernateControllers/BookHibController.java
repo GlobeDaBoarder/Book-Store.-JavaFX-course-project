@@ -162,6 +162,8 @@ public class BookHibController {
             if(genre != "All")
                 predicates.add(cb.equal(root.get("genre"), eBookGenre.valueOf(genre)));
 
+            predicates.add(cb.equal(root.get("isAvailable"), true));
+
             query.select(root).where(predicates.toArray(new Predicate[]{}));
             Query q = em.createQuery(query);
             return q.getResultList();

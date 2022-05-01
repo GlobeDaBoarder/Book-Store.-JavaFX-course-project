@@ -32,6 +32,7 @@ import javax.persistence.Persistence;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -104,7 +105,7 @@ public class MainWindow implements Initializable {
         bookGenre.getItems().addAll(eBookGenre.values());
         bookLang.getItems().addAll(eBookLang.values());
 
-        refreshBookLists(bookHibController.getAllBooks(false));
+        refreshBookLists();
 
         //User table actions
         {
@@ -344,8 +345,11 @@ public class MainWindow implements Initializable {
                             } else {
                                 ShopingCart shopingCart = user.getLastCart();
                                 shopingCart.addBookToCart(book);
+                                book.setQuantityAvalible(book.getQuantityAvalible() - 1);
+                                bookHibController.editBook(book);
                                 book.getInCarts().add(shopingCart);
                                 cartHibController.updateCart(shopingCart);
+                                refreshBookLists();
                             }
 
 
@@ -421,13 +425,26 @@ public class MainWindow implements Initializable {
                 eBookLang.valueOf(bookLang.getSelectionModel().getSelectedItem().toString()), Integer.parseInt(bookQuantity.getText()),
                 eBookGenre.valueOf(bookGenre.getSelectionModel().getSelectedItem().toString()));
         bookHibController.createBook(book);
-        refreshBookLists(bookHibController.getAllBooks(false));
+        refreshBookLists();
+
+        bookPrice.clear();
+        bookTitle.clear();
+        bookAuthor.clear();
+        bookDescription.clear();
+        publDate.setValue(LocalDate.now());
+        pgNum.clear();
+        bookQuantity.clear();
     }
 
-    private void refreshBookLists(List<Book> books) {
+    private void fillBookListView(List<Book> books){
+        books.forEach(b -> bookList.getItems().add(b.getProductID() + ": " + b.getName() + " by " + b.getAuthor()));
+    }
+
+    private void refreshBookLists() {
+        List<Book> books = bookHibController.getAllBooks(true);
         bookList.getItems().clear();
         bookListMngr.getItems().clear();
-        books.forEach(b -> bookList.getItems().add(b.getProductID() + ": " + b.getName() + " by " + b.getAuthor()));
+        fillBookListView(books);
         books = bookHibController.getAllBooks(false);
         books.forEach(b -> bookListMngr.getItems().add(b.getProductID() + ": " + b.getName() + " by " + b.getAuthor() + "(Available: " + b.isAvailable() + ")"));
     }
@@ -516,8 +533,13 @@ public class MainWindow implements Initializable {
                         @Override
                         public void handle(ActionEvent event) {
                             int book_id = Integer.parseInt(lastItem.split(":")[0]);
-                            cartHibController.removeBookFromCart(user.getLastCart().getId(), bookHibController.getBookById(book_id));
+                            Book book = bookHibController.getBookById(book_id);
+                            cartHibController.removeBookFromCart(user.getLastCart().getId(), book);
                             refreshOrdersList();
+
+                            book.setQuantityAvalible(book.getQuantityAvalible() + 1);
+                            bookHibController.editBook(book);
+                            refreshBookLists();
                         }
                     });
                 }
@@ -606,14 +628,14 @@ public class MainWindow implements Initializable {
         stage.setScene(scene);
         stage.showAndWait();
 
-        refreshBookLists(bookHibController.getAllBooks(false));
+        refreshBookLists();
 
     }
 
     public void deleteSelected(ActionEvent actionEvent) {
         int id = Integer.parseInt(bookListMngr.getSelectionModel().getSelectedItem().toString().split(":")[0]);
         bookHibController.removeBook(id);
-        refreshBookLists(bookHibController.getAllBooks(false));
+        refreshBookLists();
     }
 
     public void createComment(ActionEvent actionEvent) {
@@ -652,7 +674,9 @@ public class MainWindow implements Initializable {
     public void filterBooks() {
         List<Book> books = bookHibController.getFilteredBooks(languageCmb.getValue().toString(), genreCmb.getValue().toString(),
                 priceFromF.getText(), priceToF.getText());
-        refreshBookLists(books);
+
+        bookList.getItems().clear();
+        fillBookListView(books);
     }
 
     public void changedToCartTab(Event event) {
