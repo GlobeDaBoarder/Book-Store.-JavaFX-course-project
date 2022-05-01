@@ -515,29 +515,7 @@ public class MainWindow implements Initializable {
                         @Override
                         public void handle(ActionEvent event) {
                             int book_id = Integer.parseInt(lastItem.split(":")[0]);
-                            // Book book = bookHibController.getBookById(book_id);
-                            // System.out.println(book);
-                            ShopingCart shopingCart = user.getLastCart();
-                            System.out.println(shopingCart);
-                            shopingCart.getBooks().removeIf(b -> b.getProductID() == book_id);
-                            Book book = shopingCart.getBooks().stream().filter(b -> b.getProductID() == book_id).findFirst().orElse(null);
-                            book.getInCarts().remove(shopingCart);
-                            // shopingCart.removeBookFromCart(book);
-                            // System.out.println(shopingCart);
-                            // System.out.println(book.getInCarts());
-/*                            for (ShopingCart inCart : book.getInCarts()) {
-                                if(inCart.getId() == shopingCart.getId()){
-                                    book.getInCarts().remove(inCart);
-                                    break;
-                                }
-                            }*/
-
-                            //book.getInCarts().remove(shopingCart);
-                            //System.out.println(book.getInCarts());
-                            cartHibController.updateCart(shopingCart);
-                            //bookHibController.editBook(book);
-                            //userHibController.updateUser(user);
-
+                            cartHibController.removeBookFromCart(user.getLastCart().getId(), bookHibController.getBookById(book_id));
                             refreshOrdersList();
                         }
                     });
@@ -681,20 +659,24 @@ public class MainWindow implements Initializable {
     }
 
     public void verifyOrder(ActionEvent actionEvent) {
-        User user = userHibController.getUserById(userId);
-        int cart_id = Integer.parseInt(submittedOrdersMngr.getSelectionModel().getSelectedItem().toString().split(":")[0]);
-        ShopingCart shopingCart = cartHibController.getCartById(cart_id);
-        shopingCart.setCartStatus(eCartStatus.VERIFIED);
-        cartHibController.updateCart(shopingCart);
-        refreshSubmittedOrdersList();
+        if (submittedOrdersMngr.getSelectionModel().getSelectedItem() != null){
+            User user = userHibController.getUserById(userId);
+            int cart_id = Integer.parseInt(submittedOrdersMngr.getSelectionModel().getSelectedItem().toString().split(":")[0]);
+            ShopingCart shopingCart = cartHibController.getCartById(cart_id);
+            shopingCart.setCartStatus(eCartStatus.VERIFIED);
+            cartHibController.updateCart(shopingCart);
+            refreshSubmittedOrdersList();
+        }
     }
 
     public void deleteOrder(ActionEvent actionEvent) {
-        User user = userHibController.getUserById(userId);
-        int cart_id = Integer.parseInt(submittedOrdersMngr.getSelectionModel().getSelectedItem().toString().split(":")[0]);
-        ShopingCart shopingCart = cartHibController.getCartById(cart_id);
-        cartHibController.removeCart(cart_id);
-        refreshSubmittedOrdersList();
+        if (submittedOrdersMngr.getSelectionModel().getSelectedItem() != null) {
+            User user = userHibController.getUserById(userId);
+            int cart_id = Integer.parseInt(submittedOrdersMngr.getSelectionModel().getSelectedItem().toString().split(":")[0]);
+            ShopingCart shopingCart = cartHibController.getCartById(cart_id);
+            cartHibController.removeCart(cart_id);
+            refreshSubmittedOrdersList();
+        }
     }
 
     public void changedToManageOrdersTab(Event event) {
@@ -702,11 +684,16 @@ public class MainWindow implements Initializable {
     }
 
     public void submitOrder(ActionEvent actionEvent) {
-        User user = userHibController.getUserById(userId);
-        user.getLastCart().setCartStatus(eCartStatus.SUBMITTED);
-        ShopingCart shopingCart = user.getLastCart();
-        cartHibController.updateCart(shopingCart);
-        refreshOrdersList();
+        if(!orderDetailsList.getItems().isEmpty()){
+            User user = userHibController.getUserById(userId);
+            user.getLastCart().setCartStatus(eCartStatus.SUBMITTED);
+            ShopingCart shopingCart = user.getLastCart();
+            cartHibController.updateCart(shopingCart);
+            refreshOrdersList();
+        }else{
+            AlertMessage.generateMessage("Cart is empty", "Can't submit an order without any books ");
+        }
+
 
     }
 }

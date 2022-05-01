@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartHibController {
@@ -133,6 +134,42 @@ public class CartHibController {
             em.merge(shopingCart);
 
             em.remove(shopingCart);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    public void removeBookFromCart(int cart_id, Book book){
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            ShopingCart shopingCart = null;
+            try {
+                shopingCart = em.getReference(ShopingCart.class, cart_id);
+            } catch (Exception e) {
+                System.out.println("No cart with such ID");
+            }
+
+
+            ShopingCart finalShopingCart = shopingCart;
+            for (ShopingCart inCart : book.getInCarts()) {
+                if(inCart.getId() == shopingCart.getId()){
+                    book.getInCarts().remove(inCart);
+                    break;
+                }
+            }
+            em.merge(book);
+
+
+            shopingCart.getBooks().remove(book);
+            em.merge(shopingCart);
+
             em.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
