@@ -119,12 +119,39 @@
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <ListView fx:id="orderDetailsMngr" layoutX="14.0" layoutY="34.0" prefHeight="322.0" prefWidth="254.0" />
-                  <ListView fx:id="submittedOrdersMngr" layoutX="281.0" layoutY="34.0" onMouseClicked="#showSelectedOrderDetails" prefHeight="250.0" prefWidth="306.0" />
-                  <Text layoutX="281.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="submited orders" />
+                  <ListView fx:id="orderDetailsMngr" layoutX="14.0" layoutY="34.0" prefHeight="322.0" prefWidth="161.0" />
                   <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="order details" />
-                  <Button layoutX="343.0" layoutY="312.0" mnemonicParsing="false" onAction="#verifyOrder" text="Verify order" />
-                  <Button layoutX="447.0" layoutY="312.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete order" />
+                  <TabPane layoutX="184.0" layoutY="14.0" prefHeight="339.0" prefWidth="411.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                      <Tab text="Submitted orders ">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <ListView fx:id="submittedOrdersMngr" layoutY="29.0" onMouseClicked="#showSelectedOrderDetails" prefHeight="234.0" prefWidth="412.0" />
+                                    <Button layoutX="97.0" layoutY="270.0" mnemonicParsing="false" onAction="#verifyOrder" text="Verify order" />
+                                    <Button layoutX="239.0" layoutY="270.0" mnemonicParsing="false" onAction="#deleteOrder" text="Delete order" />
+                                    <HBox layoutX="1.0" layoutY="1.0" prefHeight="26.0" prefWidth="410.0">
+                                       <children>
+                                          <DatePicker fx:id="dateFromF" prefHeight="26.0" prefWidth="134.0" promptText="date from" />
+                                          <DatePicker fx:id="dateTillF" prefHeight="26.0" prefWidth="142.0" promptText="date till" />
+                                          <TextField fx:id="userIdF" prefHeight="26.0" prefWidth="85.0" promptText="user id " />
+                                          <Button mnemonicParsing="false" onAction="#filterSubmittedOrders" text="filter" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab onSelectionChanged="#loadAllOrders" text="All orders">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <ListView fx:id="allOrders" prefHeight="314.0" prefWidth="415.0" />
+                                 </children></AnchorPane>
+                        </content>
+                      </Tab>
+                    </tabs>
+                  </TabPane>
                </children>
             </AnchorPane>
         </content>

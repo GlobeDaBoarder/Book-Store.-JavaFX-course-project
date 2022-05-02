@@ -82,6 +82,10 @@ public class MainWindow implements Initializable {
     public Button submitOrderBtn;
     public Text orderIsSubmittedText;
     public Tab ManageOrderTab;
+    public ListView allOrders;
+    public DatePicker dateFromF;
+    public DatePicker dateTillF;
+    public TextField userIdF;
 
     private ObservableList<UsersTableParams> data = FXCollections.observableArrayList();
 
@@ -602,7 +606,8 @@ public class MainWindow implements Initializable {
         submittedOrdersMngr.getItems().clear();
         List<ShopingCart> orders = cartHibController.getAllVerifiedCarts();
         orders.forEach(shopingCart -> submittedOrdersMngr.getItems().add(shopingCart.getId() + ": crated on "
-                + shopingCart.getCartCreateDate() + " with " + shopingCart.getBooks().size() + " items"));
+                + shopingCart.getCartCreateDate() + " with " + shopingCart.getBooks().size() + " items by user(id) "
+                + shopingCart.getBuyer().getId() ));
     }
 
     public void setUserId(int userId) {
@@ -741,12 +746,35 @@ public class MainWindow implements Initializable {
     }
 
     public void showSelectedOrderDetails(MouseEvent mouseEvent) {
-        User user = userHibController.getUserById(userId);
-        orderDetailsMngr.getItems().clear();
-        int cart_id = Integer.parseInt(submittedOrdersMngr.getSelectionModel().getSelectedItem().toString().split(":")[0]);
-        ShopingCart shopingCart = cartHibController.getCartById(cart_id);
-        List<Book> orderedBooks = shopingCart.getBooks();
+        if(submittedOrdersMngr.getSelectionModel().getSelectedItem() != null){
+            User user = userHibController.getUserById(userId);
+            orderDetailsMngr.getItems().clear();
+            int cart_id = Integer.parseInt(submittedOrdersMngr.getSelectionModel().getSelectedItem().toString().split(":")[0]);
+            ShopingCart shopingCart = cartHibController.getCartById(cart_id);
+            List<Book> orderedBooks = shopingCart.getBooks();
 
-        orderedBooks.forEach(b -> orderDetailsMngr.getItems().add(b.getProductID() + ": " + b.getName() + " by " + b.getAuthor()));
+            orderedBooks.forEach(b -> orderDetailsMngr.getItems().add(b.getProductID() + ": " + b.getName() + " by " + b.getAuthor()));
+        }
+    }
+
+    public void filterSubmittedOrders() {
+        submittedOrdersMngr.getItems().clear();
+        User user = null;
+        if(!userIdF.getText().isBlank()){
+            user = userHibController.getUserById(Integer.parseInt(userIdF.getText()));
+        }
+        List<ShopingCart> orders = cartHibController.filterSubmitted(dateFromF.getValue(), dateTillF.getValue(), user);
+        orders.forEach(shopingCart -> submittedOrdersMngr.getItems().add(shopingCart.getId() + ": crated on "
+                + shopingCart.getCartCreateDate() + " with " + shopingCart.getBooks().size() + " items by user(id) "
+                + shopingCart.getBuyer().getId() ));
+    }
+
+    public void loadAllOrders(Event event) {
+        allOrders.getItems().clear();
+        List<ShopingCart> orders = cartHibController.getAllCarts();
+        orders.forEach(cart -> allOrders.getItems().add((cart.getId() + ": crated on "
+                + cart.getCartCreateDate() + " with " + cart.getBooks().size() + " items by user(id) "
+                + cart.getBuyer().getId())));
+
     }
 }

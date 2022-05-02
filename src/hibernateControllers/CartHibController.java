@@ -1,16 +1,15 @@
 package hibernateControllers;
 
-import book_store.Book;
-import book_store.ShopingCart;
-import book_store.User;
-import book_store.eCartStatus;
+import book_store.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +82,39 @@ public class CartHibController {
             CriteriaQuery<ShopingCart> query = cb.createQuery(ShopingCart.class);
             Root<ShopingCart> root = query.from(ShopingCart.class);
             query.select(root).where(cb.equal(root.get("cartStatus"), eCartStatus.SUBMITTED));
+            Query q = em.createQuery(query);
+            return q.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
+
+    public List<ShopingCart> filterSubmitted(LocalDate dateFrom, LocalDate dateTill, User user){
+
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<ShopingCart> query = cb.createQuery(ShopingCart.class);
+            Root<ShopingCart> root = query.from(ShopingCart.class);
+
+            List<Predicate> predicates = new ArrayList<Predicate>();
+
+            predicates.add(cb.equal(root.get("cartStatus"), eCartStatus.SUBMITTED));
+
+            if (dateFrom != null)
+                predicates.add(cb.greaterThanOrEqualTo(root.get("cartCreateDate"), dateFrom));
+            if (dateTill != null)
+                predicates.add(cb.lessThanOrEqualTo(root.get("cartCreateDate"), dateTill));
+            if(user != null)
+                predicates.add(cb.equal(root.get("buyer"), user));
+
+
+            query.select(root).where(predicates.toArray(new Predicate[]{}));
             Query q = em.createQuery(query);
             return q.getResultList();
         } catch (Exception e) {
@@ -179,4 +211,6 @@ public class CartHibController {
             }
         }
     }
+
+
 }
