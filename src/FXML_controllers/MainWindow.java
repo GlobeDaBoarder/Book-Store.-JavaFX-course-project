@@ -1,7 +1,6 @@
 package FXML_controllers;
 
 import book_store.*;
-import com.google.protobuf.EmptyOrBuilder;
 import hibernateControllers.BookHibController;
 import hibernateControllers.CartHibController;
 import hibernateControllers.UserHibController;
@@ -318,14 +317,15 @@ public class MainWindow implements Initializable {
                 HBox hbox = new HBox();
                 Label label = new Label("(empty)");
                 Pane pane = new Pane();
-                Button button = new Button("(add to cart)");
+                Button add_button = new Button("(add to cart)");
+                Button more_button = new Button("(view book)");
                 String lastItem;
 
                 public XCell() {
                     super();
-                    hbox.getChildren().addAll(label, pane, button);
+                    hbox.getChildren().addAll(label, pane, add_button, more_button);
                     HBox.setHgrow(pane, Priority.ALWAYS);
-                    button.setOnAction(new EventHandler<ActionEvent>() {
+                    add_button.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent event) {
                             User user = userHibController.getUserById(userId);
@@ -350,6 +350,30 @@ public class MainWindow implements Initializable {
                                 cartHibController.updateCart(shopingCart);
                                 refreshBookLists();
                             }
+                        }
+                    });
+
+                    more_button.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            FXMLLoader fxmlLoader = new FXMLLoader(StartController.class.getResource("../view/ViewBookPage.fxml"));
+                            Parent parent = null;
+                            try {
+                                parent = fxmlLoader.load();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            ViewBookPage viewBookPage= fxmlLoader.getController();
+                            int book_id = Integer.parseInt(lastItem.split(":")[0]);
+                            viewBookPage.setBookData(book_id);
+
+                            Scene scene = new Scene(parent);
+                            Stage stage = new Stage();
+                            stage.initModality(Modality.APPLICATION_MODAL);
+                            stage.setTitle("View Book");
+                            stage.setScene(scene);
+                            stage.showAndWait();
                         }
                     });
                 }
@@ -625,7 +649,7 @@ public class MainWindow implements Initializable {
         refreshBookLists();
     }
 
-    public void createComment(ActionEvent actionEvent) {
+    public void createComment() {
         int id = Integer.parseInt(bookList.getSelectionModel().getSelectedItem().toString().split(":")[0]);
         Book book = bookHibController.getBookById(id);
 
@@ -644,7 +668,7 @@ public class MainWindow implements Initializable {
         }
     }
 
-    public void viewComments(ActionEvent actionEvent) throws IOException {
+    public void viewComments() throws IOException {
         int id = Integer.parseInt(bookList.getSelectionModel().getSelectedItem().toString().split(":")[0]);
         FXMLLoader fxmlLoader = new FXMLLoader(LoginPage.class.getResource("../view/CommentsPage.fxml"));
         Parent parent = fxmlLoader.load();
